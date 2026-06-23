@@ -49,7 +49,8 @@ I am going to use the required technologies in the following ways.
 - **HTML** - Three main HTML pages. One for login, one for reading, and one for looking at saved words. I may add another for choosing a book or choose only one book. 
 - **CSS** - The whitespace, font, and color of the reading page will make it look like a book. There will be one accent color for when a user clicks a word. I may incorporate an optional dark mode. 
 - **React** - Once the user logs in, the screen will go to the reading page. Then the user can toggle between reading and looking at new words by clicking a button. The user changes pages by swiping. The screen is reactive to touching a word; it displays the definition of a word when the word is tapped. 
-- **Service** - Backend service with endpoints for login, saving words, and retrieving other users' saved words. I will use a Project Gutenberg API to get books and a dictionary API to describe words. 
+- **Service** - Backend service with endpoints for login, saving words, and retrieving other users' saved words. I will use a Project Gutenberg API to get books.
+    * https://gutenbergapi.com/
 - **DB/Login** - I will store login information, users, saved words, and the page a user is on. 
 - **WebSocket** - As each user saves words, other users can see the words they saved. 
 
