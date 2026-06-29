@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Tell browsers not to scale the viewport automatically -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Libreboox HTML</title>
+    <!-- <link rel="icon" href="favicon.ico" /> -->
+  </head>
+  <body>
+    <!-- Use header, main, and footer elements to give semantic structure -->
+    <header>
+      <h1>LibreBoox<sup></sup></h1>
+
+      <!-- Navigation elements -->
+      <nav>
+        <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
+        <menu>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="languages.html">Languages</a></li>
+          <li><a href="new_words.html">New Words</a></li>
+          <li><a href="page.html">Continue Reading</a></li>
+        </menu>
+      </nav>
+
+      <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
+      <hr />
+    </header>
+
+    <main>
+      <div class="new-words-controls">
+        <button id="my-words">My Words</button>
+        <button id="friends-words">My Friends' Words</button>
+      </div>
+      <table>
+        <thead>
+            <tr>
+                <th>Word</th>
+                <th>Definition</th>
+                <th>Translated Definition</th>
+                <th>Translation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Libro</td>
+                <td>Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen:</td>
+                <td>A set of handwritten or printed sheets of paper that, when sewn or bound together, form a volume:</td>
+                <td>Book</td>
+            </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <footer>
+      <hr />
+      <span class="text-reset">Coleman Hall-Brown</span>
+      <br />
+      <a href="https://github.com/colemanhb/startup/libreboox-html">GitHub</a>
+    </footer>
+  </body>
+</html>
