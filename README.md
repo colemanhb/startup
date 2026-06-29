@@ -72,24 +72,24 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Rented EC2 server** - I did not complete this part of the deliverable.
-- [ ] **Leased domain name** - I did not complete this part of the deliverable.
-- [ ] **Server accessible** from my domain: [https://yourdomainnamehere.click](https://yourdomainnamehere.click) - I did not complete this part of the deliverable.
+- [x] **Rented EC2 server** - I rented an EC2 server
+- [x] **Leased domain name** - I leased libreboox.com
+- [x] **Server accessible** from my domain: [https://libreboox.com](https://libreboox.com)
 
 ## 🚀 HTML deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **HTML pages** - I have pages for different languages, a book list, a page view, and saved words
+- [x] **Proper HTML element usage** - I used many HTML elements, including head, body, footer, h1-h3, div, input, a, ul, table, and more
+- [x] **Links** - All pages have links to Home, Languages, Continue Reading, and New Words. The Languages page links to a booklist, which links to an example page, which is at this point the same as Continue Reading. 
+- [x] **Text** - The booklist, page, and new words pages have text.
+- [x] **3rd party API placeholder** - Book page will come from project gutenberg API, contents of the word popup will come from a dictionary/translation API.
+- [x] **Images** - page.html has an image as a placeholder, about page has images of different classic books
+- [x] **Login placeholder** - Placeholder for username and password.
+- [x] **DB data placeholder** - New words list for user and user's friends.
+- [x] **WebSocket placeholder** - New words list for user's friends.
 
 ## 🚀 CSS deliverable
 
