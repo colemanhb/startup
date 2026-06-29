@@ -47,7 +47,7 @@ Class defines an inheritance structure - all parts with the same class will beha
 ```
 role
 <nav></nav> for the banner at the top
-<nav><a href="#test.html">Test<\a> <a href="#startup.html">Startup</a></nav>
+<nav><a href="#test.html">Test</a> <a href="#startup.html">Startup</a></nav>
 
 
 ## CSS
