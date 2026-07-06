@@ -209,3 +209,7 @@ header li {
 button {
     font-size: 1.5rem;
 }
+
+aside button {
+    margin-top: 10px;
+}
