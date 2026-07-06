@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Archivo-Black';
+  src: url('https://fonts.googleapis.com/css2?family=Archivo+Black:wght@400&display=swap');
+}
+
 * {
     box-sizing: border-box;
 }
@@ -212,4 +217,8 @@ button {
 
 aside button {
     margin-top: 10px;
+}
+
+h1, h2, h3, li, button {
+    font-family: 'Archivo-Black', sans-serif;
 }

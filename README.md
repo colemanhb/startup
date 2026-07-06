@@ -100,7 +100,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Use of a CSS framework** - Most of my CSS information is in main.css and more specific ones are in other files.
 - [x] **All visual elements styled using CSS** - I styled all of my visual elements.
 - [x] **Responsive to window resizing using flexbox and/or grid display** - I have boxes that reformat according to window size.
-- [ ] **Use of a imported font** - I did not complete this part of the deliverable.
+- [x] **Use of a imported font** - I imported archivo black and used it for all headers and buttons. 
 - [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I used many different type of selectors to edit specific parts of the html and not other parts. 
 
 ## 🚀 React part 1: Routing deliverable
