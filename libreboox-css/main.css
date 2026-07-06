@@ -108,7 +108,7 @@ menu a {
     text-decoration: none;
 }
 
-menu a:hover {
+a:hover {
     color: orange;
 }
 
@@ -116,6 +116,10 @@ button {
     font-size: 20px;
     padding: 5px 10px;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: orange;
 }
 
 .picture-row {
@@ -139,4 +143,36 @@ button {
 }
 #dark-theme {
     background: black;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    span {
+        display: block;
+        margin-top: 10px;
+    }
+    input {
+        width: 250px;
+        height: 40px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+    input::placeholder {
+        color: rgb(255, 212, 131);
+    }
+    button {
+        height: 40px;
+        margin-top: 10px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+    .login {
+        background-color: orange;
+    }
+    .login:hover {
+        background-color: rgb(177, 115, 0);
+    }
 }
