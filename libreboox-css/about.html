@@ -26,12 +26,15 @@
           <li><a href="about.html">About</a></li>
         </menu>
       </nav>
-      <aside id="settings-panel">
-        <h2>Theme</h2>
-        <button id="light-theme">Light</button>
-        <button id="dark-theme">Dark</button>
+      <aside id="settings-panel" class="open">
+        <h3>Theme</h3>
+        <div class="theme-buttons">
+          <button id="light-theme">Light</button>
+          <button id="dark-theme">Dark</button>
+        </div>
+        
 
-        <h2>Font Size</h2>
+        <h3>Font Size</h3>
         <button id="decrease-font">-</button>
         <button id="increase-font">+</button>
       </aside>
@@ -52,16 +55,14 @@
             I made this website because it's the type of website I would use to learn languages. 
             I always feel drawn to classic literature, and reading them in foreign languages is a great way to kill two birds with one stone, especially if the book was originally written in a language other than English. 
         </p>
-        <div class="picture-row">
-          <div id="don-quixote" class="picture-box"><img height="100px" src="don_quixote.jpg" alt="Don Quixote" /></div>
-          <div id="pinocchio" class="picture-box"><img height="100px" src="pinocchio.jpeg" alt="Pinocchio" /></div>
-          <div id="le-fantome" class="picture-box"><img height="100px" src="le_fantome.jpg" alt="The Phantom of the Opera" /></div>
-          <div id="alquimista" class="picture-box"><img height="100px" src="alquimista.jpg" alt="The Alchemist" /></div>
-        </div>
     </main>
 
     <footer>
       <span class="text-reset">Coleman Hall-Brown</span>
+      <div id="don-quixote" class="picture-box"><img height="100px" src="don_quixote.jpg" alt="Don Quixote" /></div>
+      <div id="pinocchio" class="picture-box"><img height="100px" src="pinocchio.jpeg" alt="Pinocchio" /></div>
+      <div id="le-fantome" class="picture-box"><img height="100px" src="le_fantome.jpg" alt="The Phantom of the Opera" /></div>
+      <div id="alquimista" class="picture-box"><img height="100px" src="alquimista.jpg" alt="The Alchemist" /></div>
       <a href="https://github.com/colemanhb/startup/tree/main/libreboox-html">GitHub</a>
     </footer>
     <script src="main.js"></script>
