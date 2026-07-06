@@ -205,3 +205,9 @@ button {
 h1, h2, h3, li, button {
     font-family: 'Archivo-Black', sans-serif;
 }
+
+@media (max-width: 600px) {
+  footer {
+    display: none;
+  }
+}
