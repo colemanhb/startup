@@ -97,7 +97,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **Visually appealing colors and layout. No overflowing elements.** - I used orange as a main color and have no overflowing elements.
-- [x] **Use of a CSS framework** - Most of my CSS information is in main.css and more specific ones are in other files.
+- [x] **Use of a CSS framework** - I used bootstrap to format my buttons and my table of new words.
 - [x] **All visual elements styled using CSS** - I styled all of my visual elements.
 - [x] **Responsive to window resizing using flexbox and/or grid display** - I have boxes that reformat according to window size.
 - [x] **Use of a imported font** - I imported archivo black and used it for all headers and buttons. 
