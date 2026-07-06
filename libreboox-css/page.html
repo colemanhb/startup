@@ -5,6 +5,8 @@
     <!-- Tell browsers not to scale the viewport automatically -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Libreboox HTML</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="page.css" />
   </head>
@@ -12,8 +14,10 @@
     <!-- Use header, main, and footer elements to give semantic structure -->
     <header>
       <div class="main-buttons">
-        <button id="menu-button">☰</button>
-        <button id="settings-button">⚙</button> 
+        <button id="menu-button" class="btn btn-light">☰</button>
+        <button id="settings-button" class="btn btn-light">
+          <i class="bi bi-gear"></i>
+        </button> 
       </div>
       <!-- Navigation elements -->
       <nav id="sidebar">
@@ -29,13 +33,21 @@
       </nav>
       <aside id="settings-panel" class="open">
         <div class="theme-buttons">
-          <button id="light-theme"></button>
-          <button id="dark-theme"></button>
+          <button id="light-theme" class="btn btn-light">
+            <i class="bi bi-square"></i>
+          </button>
+          <button id="dark-theme" class="btn btn-light">
+            <i class="bi bi-square-fill"></i>
+          </button>
         </div>
         
         <div class="fontsize-buttons">
-          <button id="decrease-font">-</button>
-          <button id="increase-font">+</button>
+          <button id="decrease-font" class="btn btn-light">
+            <i class="bi bi-plus-square"></i>
+          </button>
+          <button id="increase-font" class="btn btn-light">
+            <i class="bi bi-dash-square"></i>
+          </button>
         </div>
       </aside>
 
@@ -54,17 +66,17 @@ Sólo quisiera dártela monda y desnuda, sin el ornato de prólogo, ni de la inu
 
 — Porque, ¿cómo queréis vos que no me tenga confuso el qué dirá el antiguo legislador que llaman vulgo cuando vea que, al cabo de tantos años como ha que duermo en el silencio del olvido, salgo ahora, con todos mis años a cuestas, con una leyenda seca como un esparto, ajena de invención, menguada de estilo, pobre de concetos y falta de toda erudición y doctrina; sin acotaciones en las márgenes y sin anotaciones en el fin del libro, como veo que están otros libros, aunque sean fabulosos y profanos, tan llenos de sentencias de Aristóteles, de Platón y de toda la caterva de filósofos, que admiran a los leyentes y tienen a sus autores por hombres leídos, eruditos y elocuentes? ¡Pues qué, cuando citan la Divina Escritura! No dirán sino que son unos santos Tomases y otros doctores de la Iglesia; guardando en esto un decoro tan ingenioso, que en un renglón han pintado un enamorado destraído y en otro hacen un sermoncico cristiano, que es un contento y un regalo oílle o leelle. De todo esto ha de carecer mi libro, porque ni tengo qué acotar en el margen, ni qué anotar en el fin, ni menos sé qué autores sigo en él, para ponerlos al principio, como hacen todos, por las letras del A.B.C., comenzando en Aristóteles y acabando en Xenofonte y en Zoílo o Zeuxis, aunque fue maldiciente el uno y pintor el otro. También ha de carecer mi libro de sonetos al principio, a lo menos de sonetos cuyos autores sean duques, marqueses, condes, obispos, damas o poetas celebérrimos; aunque, si yo los pidiese a dos o tres oficiales amigos, yo sé que me los darían, y tales, que no les igualasen los de aquellos que tienen más nombre en nuestra España. En fin, señor y amigo mío —proseguí—, yo determino que el señor don Quijote se quede sepultado en sus archivos en la Mancha, hasta que el cielo depare quien le adorne de tantas cosas como le faltan; porque yo me hallo incapaz de remediarlas, por mi insuficiencia y pocas letras, y porque naturalmente soy poltrón y perezoso de andarme buscando autores que digan lo que yo me sé decir sin ellos. De aquí nace la suspensión y elevamiento, amigo, en que me hallastes; bastante causa para ponerme en ella la que de mí habéis oído.</p>
         <div class="page-controls">
-            <button id="prev-page">Previous Page</button>
+            <button id="prev-page" class="btn btn-light">Previous Page</button>
             <span id="page-number">Page 1</span>
-            <button id="next-page">Next Page</button>
+            <button id="next-page" class="btn btn-light">Next Page</button>
         </div>
         <dialog id="popup">
             <h3 id="word">Libro</h3>
             <p id="definition">Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen:</p>
             <p id="translated-definition">A set of handwritten or printed sheets of paper that, when sewn or bound together, form a volume:</p>
             <p id="translation">Book</p>
-            <button id="close-popup">Close</button>
-            <button id="save-word">Save Word</button>
+            <button id="close-popup" class="btn btn-light">Close</button>
+            <button id="save-word" class="btn btn-light">Save Word</button>
         </dialog>
     </main>
 

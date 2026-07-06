@@ -1,0 +1,19 @@
+aside button {
+    margin-top: 10px;
+}
+
+.main-buttons {
+      padding: 10px;
+}
+
+button {
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+header button {
+    aspect-ratio: 1/1;
+}
