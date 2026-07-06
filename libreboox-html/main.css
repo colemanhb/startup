@@ -1,11 +1,24 @@
+* {
+    box-sizing: border-box;
+    outline: 1px solid red;
+}
+
 body {
   display: flex;
   flex-direction: column;
-  min-width: 375px;
+  width: 100%;
 }
 
 header {
   flex: 0 80px;
+}
+
+.main-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
 }
 
 main {
@@ -32,7 +45,7 @@ footer {
 
 #sidebar {
     position: fixed;
-    left: -300px;  
+    left: -400px;  
     top: 0;
     bottom: 0;
     width: 280px;
@@ -78,4 +91,10 @@ menu a {
 
 menu a:hover {
     color: orange;
+}
+
+button {
+    font-size: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
