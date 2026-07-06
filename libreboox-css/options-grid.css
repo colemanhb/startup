@@ -1,10 +1,11 @@
 main {
     justify-content: flex-start;
     align-items: stretch;
-    h2 {
+}
+
+main h2 {
         text-align: center;
     }
-}
 
 main ul {
     display: grid;
@@ -13,26 +14,28 @@ main ul {
     justify-content: center;
     align-items: center;
     list-style: none;
-    li {
+}
+
+main ul li {
         aspect-ratio: 1/1;
 
         border: 1px solid #ccc;
         border-radius: 1em;
         overflow: hidden;
-        a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            width: 100%;
-            height: 100%;
-            
-            text-align: center;
-            text-decoration: none;
-
-            overflow-wrap: break-word;
-        }
     }
+
+main ul li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    
+    text-align: center;
+    text-decoration: none;
+
+    overflow-wrap: break-word;
 }
 
 main li a:hover {
