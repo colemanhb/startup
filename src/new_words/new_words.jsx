@@ -2,8 +2,25 @@ import React from 'react';
 
 export function NewWords() {
   return (
-    <main className="container-fluid bg-secondary text-center">
-      <div>New Words content goes here</div>
+    <main>
+      <div className="new-words-controls">
+        <button id="my-words" className="btn btn-light">My Words</button>
+        <button id="friends-words" className="btn btn-light">My Friends' Words</button>
+      </div>
+      <table>
+        <thead>
+            <tr>
+                <th>Word</th>
+                <th>Definition</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Libro</td>
+                <td>Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen. This is not the definition of the word, but I am adding more text to show how the css handles very long definitions.</td>
+            </tr>
+        </tbody>
+      </table>
     </main>
   );
 }
