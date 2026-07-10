@@ -1,22 +1,25 @@
+import './booklist.css';
 import React from 'react';
+
+import { NavLink } from 'react-router-dom';
 
 export function Booklist() {
   return (
-    <main>
+    <main className="booklist">
         <h2 id = "spanish">
             Spanish
         </h2>
             <ul>
-                <li><a href="page.html">Don Quixote</a></li>
-                <li><a href="page.html">El Crimen y el Castigo</a></li>
-                <li><a href="page.html">Cuentos de Amor</a></li>
+                <li><NavLink to="/page">Don Quixote</NavLink></li>
+                <li><NavLink to="/page">El Crimen y el Castigo</NavLink></li>
+                <li><NavLink to="/page">Cuentos de Amor</NavLink></li>
             </ul>
         <h2 id = "french">
             French
         </h2>
             <ul>
                 <li><NavLink to="/page">Le Fantôme de l'Opéra</NavLink></li>
-            </ul>
+            </ul>4
         <h2 id = "german">
             German
         </h2>
@@ -29,6 +32,21 @@ export function Booklist() {
             <ul>
                 <li><NavLink to="/page">Le Avventure di Pinocchio</NavLink></li>
             </ul>
+        <h2 id = "portuguese">
+            Portuguese
+        </h2>
+        <h2 id = "russian">
+            Russian
+        </h2>
+        <h2 id = "mandarin">
+            Mandarin
+        </h2>
+        <h2 id = "japanese">
+            Japanese
+        </h2>
+        <h2 id = "korean">
+            Korean
+        </h2>
     </main>
   );
 }

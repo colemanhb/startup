@@ -1,8 +1,9 @@
+import './page.css';
 import React from 'react';
 
 export function Page() {
   return (
-    <main>
+    <main className="page">
         <div className="title-author">
           <h4>Don Quixote</h4>
           <h4>Miguel de Cervantes</h4>

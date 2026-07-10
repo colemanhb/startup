@@ -1,13 +1,13 @@
-main {
+.new-words {
     justify-content: flex-start;
     
 }
 
-table {
+.new-words table {
     width: 100%;
 }
 
-th, td {
+.new-words th, .new-words td {
   border: 1px solid #ccc;
   padding: 10px;
 }

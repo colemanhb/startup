@@ -1,3 +1,4 @@
+import './languages.css';
 import React from 'react';
 
 import { NavLink } from 'react-router-dom';
@@ -16,12 +17,12 @@ const languages = [
 
 export function Languages() {
   return (
-    <main>
+    <main className="languages">
       <h2>Choose a language to read in</h2>
       <ul>
         {languages.map((language) => (
           <li key={language.id}>
-            <NavLink to={`/booklist/${language.id}`}>
+            <NavLink to={`/booklist#${language.id}`}>
               {language.name}
             </NavLink>
           </li>

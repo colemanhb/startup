@@ -1,13 +1,13 @@
-main {
+.booklist {
     justify-content: flex-start;
     align-items: stretch;
 }
 
-main h2 {
+.booklist h2 {
         text-align: center;
     }
 
-main ul {
+.booklist ul {
     display: grid;
     grid-template-columns: repeat(auto-fit, 200px);
     gap: 1em;
@@ -16,7 +16,7 @@ main ul {
     list-style: none;
 }
 
-main ul li {
+.booklist ul li {
         aspect-ratio: 1/1;
 
         border: 1px solid #ccc;
@@ -24,7 +24,7 @@ main ul li {
         overflow: hidden;
     }
 
-main ul li a {
+.booklist ul li a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,7 +38,7 @@ main ul li a {
     overflow-wrap: break-word;
 }
 
-main li a:hover {
+.booklist li a:hover {
     background-color: orange;
     color: black;
 }

@@ -1,13 +1,14 @@
+import './new_words.css';
 import React from 'react';
 
 export function NewWords() {
   return (
-    <main>
+    <main className="new-words">
       <div className="new-words-controls">
         <button id="my-words" className="btn btn-light">My Words</button>
         <button id="friends-words" className="btn btn-light">My Friends' Words</button>
       </div>
-      <table>
+      <table className="table table-bordered">
         <thead>
             <tr>
                 <th>Word</th>

@@ -1,13 +1,13 @@
-main {
+.languages {
     justify-content: flex-start;
     align-items: stretch;
 }
 
-main h2 {
+.languages h2 {
         text-align: center;
     }
 
-main ul {
+.languages ul {
     display: grid;
     grid-template-columns: repeat(auto-fit, 200px);
     gap: 1em;
@@ -16,7 +16,7 @@ main ul {
     list-style: none;
 }
 
-main ul li {
+.languages ul li {
         aspect-ratio: 1/1;
 
         border: 1px solid #ccc;
@@ -24,7 +24,7 @@ main ul li {
         overflow: hidden;
     }
 
-main ul li a {
+.languages ul li a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,7 +38,7 @@ main ul li a {
     overflow-wrap: break-word;
 }
 
-main li a:hover {
+.languages li a:hover {
     background-color: orange;
     color: black;
 }

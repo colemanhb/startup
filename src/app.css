@@ -99,9 +99,10 @@ footer {
 
 menu {
     padding: 10px;
-    li {
-        border-bottom: 1px solid #ccc;
-    }
+}
+
+menu li {
+    border-bottom: 1px solid #ccc;
 }
 
 a {
@@ -144,33 +145,40 @@ button:hover {
 form {
     display: flex;
     flex-direction: column;
-    span {
-        display: block;
-        margin-top: 10px;
-    }
-    input {
-        width: 250px;
-        height: 40px;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-    }
-    input::placeholder {
-        color: orange;
-    }
-    button {
-        height: 40px;
-        margin-top: 10px;
-    }
-    .login {
-        background-color: orange;
-    }
-    .login:hover {
-        background-color: rgb(199, 129, 0);
-    }
-    .create:hover {
-        background-color: rgb(176, 176, 176);
-    }
+}
+
+form span {
+    display: block;
+    margin-top: 10px;
+}
+
+form input {
+    width: 250px;
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+form input::placeholder {
+    color: orange;
+}
+
+form button {
+    height: 40px;
+    margin-top: 10px;
+}
+
+form .login {
+    background-color: orange;
+}
+
+form .login:hover {
+    background-color: rgb(199, 129, 0);
+}
+
+form .create:hover {
+    background-color: rgb(176, 176, 176);
 }
 
 p {
