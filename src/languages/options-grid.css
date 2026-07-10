@@ -1,0 +1,44 @@
+main {
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+main h2 {
+        text-align: center;
+    }
+
+main ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 200px);
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+
+main ul li {
+        aspect-ratio: 1/1;
+
+        border: 1px solid #ccc;
+        border-radius: 1em;
+        overflow: hidden;
+    }
+
+main ul li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    
+    text-align: center;
+    text-decoration: none;
+
+    overflow-wrap: break-word;
+}
+
+main li a:hover {
+    background-color: orange;
+    color: black;
+}
