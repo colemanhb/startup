@@ -19,7 +19,7 @@ export function Booklist() {
         </h2>
             <ul>
                 <li><NavLink to="/page">Le Fantôme de l'Opéra</NavLink></li>
-            </ul>4
+            </ul>
         <h2 id = "german">
             German
         </h2>
