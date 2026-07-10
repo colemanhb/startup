@@ -11,12 +11,12 @@ html {
     height: 100%;
 }
 
-html, body {
+html, .body {
     margin: 0;
     padding: 0;
 }
 
-body { 
+.body { 
   min-height: 100vh;
   display: flex;
   flex-direction: column;
