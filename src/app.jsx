@@ -16,9 +16,14 @@ function App() {
   const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
   const currentAuthState = username ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
+  
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+  
   const sidebarRef = React.useRef(null);
   const menuButtonRef = React.useRef(null);
+  const settingsPanelRef = React.useRef(null);
+  const settingsButtonRef = React.useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -31,6 +36,16 @@ function App() {
         ) {
             setIsSidebarOpen(false);
         }
+
+        if (
+            isSettingsOpen &&
+            settingsPanelRef.current &&
+            !settingsPanelRef.current.contains(event.target) &&
+            settingsButtonRef.current &&
+            !settingsButtonRef.current.contains(event.target)
+        ) {
+            setIsSettingsOpen(false);
+        }
     }
 
     document.addEventListener('click', handleClickOutside);
@@ -38,7 +53,7 @@ function App() {
     return () => {
         document.removeEventListener('click', handleClickOutside);
     };
-}, [isSidebarOpen]);
+}, [isSidebarOpen, isSettingsOpen]);
 
   return (
     <BrowserRouter>
@@ -49,11 +64,22 @@ function App() {
                         ref={menuButtonRef} 
                         id="menu-button" 
                         className="btn btn-light"
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        onClick={() => {
+                            setIsSidebarOpen(!isSidebarOpen);
+                            setIsSettingsOpen(false);
+                        }}
                     >
                         ☰
                     </button>
-                    <button id="settings-button" className="btn btn-light">
+                    <button 
+                        ref={settingsButtonRef} 
+                        id="settings-button" 
+                        className="btn btn-light"
+                        onClick={() => {
+                            setIsSettingsOpen(!isSettingsOpen);
+                            setIsSidebarOpen(false);
+                        }}
+                    >
                     <i className="bi bi-gear"></i>
                     </button> 
                 </div>
@@ -71,7 +97,11 @@ function App() {
                     <li><NavLink to="/about">About</NavLink></li>
                     </menu>
                 </nav>
-                <aside id="settings-panel" className="open">
+                <aside 
+                    ref={settingsPanelRef}
+                    id="settings-panel" 
+                    className={isSettingsOpen ? 'open' : ''}
+                >
                     <div className="theme-buttons">
                     <button id="light-theme" className="btn btn-light">
                         <i className="bi bi-square"></i>
