@@ -1,21 +1,26 @@
 import React from 'react';
 
-export function Login() {
+import { Unauthenticated } from './unauthenticated';
+import { Authenticated } from './authenticated';
+import { AuthState } from './authState';
+
+export function Login({ username, authState, onAuthChange }) {
   return (
-    <main>
-      <h1>Welcome to LibreBoox</h1>
-      <form method="get" action="page.html">
-        <div>
-          <span>Username</span>
-          <input type="text" placeholder="username" />
-        </div>
-        <div>
-          <span>Password</span>
-          <input type="password" placeholder="password" />
-        </div>
-        <button type="submit" className="btn btn-light">Log In</button>
-        <button type="submit" className="btn btn-light">Create Account</button>
-      </form>
+    <main className='login'>
+      <div>
+        {authState !== AuthState.Unknown && <h1>Welcome to LibreBoox</h1>}
+        {authState === AuthState.Authenticated && (
+          <Authenticated username={username} onLogout={() => onAuthChange(username, AuthState.Unauthenticated)} />
+        )}
+        {authState === AuthState.Unauthenticated && (
+          <Unauthenticated
+            username={username}
+            onLogin={(loginUsername) => {
+              onAuthChange(loginUsername, AuthState.Authenticated);
+            }}
+          />
+        )}
+      </div>
     </main>
   );
 }
