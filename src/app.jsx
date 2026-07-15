@@ -130,7 +130,14 @@ function App() {
                 />
                 <Route path='/languages' element={<Languages />} />
                 <Route path='/page' element={<Page />} />
-                <Route path='/new-words' element={<NewWords />} />
+                <Route 
+                    path='/new-words' 
+                    element={
+                        <NewWords 
+                            username={username}
+                            authState={authState}
+                        />} 
+                />
                 <Route path='/about' element={<About />} />
                 <Route path='/booklist' element={<Booklist />} />
                 <Route path='*' element={<NotFound />} />
