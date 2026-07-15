@@ -10,8 +10,12 @@ import { Page } from './page/page';
 import { NewWords } from './new_words/new_words';
 import { About } from './about/about';
 import { Booklist } from './booklist/booklist';
+import { AuthState } from './login/authState';
 
-export default function App() {
+function App() {
+  const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
+  const currentAuthState = username ? AuthState.Authenticated : AuthState.Unauthenticated;
+  const [authState, setAuthState] = React.useState(currentAuthState);
   return (
     <BrowserRouter>
         <div className="body bg-light text-dark">
@@ -46,7 +50,19 @@ export default function App() {
             </header>
 
             <Routes>
-                <Route path='/' element={<Login />} exact />
+                <Route 
+                    path='/' 
+                    element={
+                        <Login
+                            username={username}
+                            authState={authState}
+                            onAuthChange={(username, authstate) => {
+                                setUsername(username);
+                                setAuthState(authstate);
+                            }}
+                        />} 
+                        exact 
+                />
                 <Route path='/languages' element={<Languages />} />
                 <Route path='/page' element={<Page />} />
                 <Route path='/new-words' element={<NewWords />} />
@@ -71,3 +87,5 @@ export default function App() {
 function NotFound() {
   return <main className="container-fluid bg-secondary text-center">404: Return to sender. Address unknown.</main>;
 }
+
+export default App;
