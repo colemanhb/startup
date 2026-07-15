@@ -25,6 +25,13 @@ function App() {
   const settingsPanelRef = React.useRef(null);
   const settingsButtonRef = React.useRef(null);
 
+  const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-bs-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
   useEffect(() => {
     function handleClickOutside(event) {
         if (
@@ -57,7 +64,7 @@ function App() {
 
   return (
     <BrowserRouter>
-        <div className="body bg-light text-dark">
+        <div className="body">
             <header>
                 <div className="main-buttons">
                     <button 
@@ -103,10 +110,18 @@ function App() {
                     className={isSettingsOpen ? 'open' : ''}
                 >
                     <div className="theme-buttons">
-                        <button id="light-theme" className="btn btn-light">
+                        <button 
+                            id="light-theme" 
+                            className="btn btn-light"
+                            onClick={() => setTheme('light')}
+                        >
                             <i className="bi bi-square"></i>
                         </button>
-                        <button id="dark-theme" className="btn btn-light">
+                        <button 
+                            id="dark-theme" 
+                            className="btn btn-light"
+                            onClick={() => setTheme('dark')}
+                        >
                             <i className="bi bi-square-fill"></i>
                         </button>
                     </div>

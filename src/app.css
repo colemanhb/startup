@@ -68,8 +68,8 @@ footer {
     top: 0;
     bottom: 0;
     width: 280px;
-    background-color: white;
-    border-right: 1px solid #ccc;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
     box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
     z-index: 200;
     padding: 20px;
@@ -90,8 +90,11 @@ footer {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
   padding: 20px;
   flex-direction: column;
-  background-color: white;
-  flex-direction: column;
+  
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
+
   align-items: center;
 }
 
@@ -108,7 +111,7 @@ menu li {
 }
 
 a {
-    color: black;
+    color: inherit;
 }
 
 menu a {
@@ -128,6 +131,17 @@ button:hover {
     height: 2.5rem;
     padding: 0 !important;
     font-size: 1.5rem;
+}
+
+.theme-buttons button{
+    color: black !important;
+    background-color: white !important;
+}
+
+.btn-light {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-border-color);
 }
 
 .btn-light:hover {
