@@ -91,6 +91,8 @@ footer {
   padding: 20px;
   flex-direction: column;
   background-color: white;
+  flex-direction: column;
+  align-items: center;
 }
 
 #settings-panel.open {

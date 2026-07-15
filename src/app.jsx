@@ -103,12 +103,20 @@ function App() {
                     className={isSettingsOpen ? 'open' : ''}
                 >
                     <div className="theme-buttons">
-                    <button id="light-theme" className="btn btn-light">
-                        <i className="bi bi-square"></i>
-                    </button>
-                    <button id="dark-theme" className="btn btn-light">
-                        <i className="bi bi-square-fill"></i>
-                    </button>
+                        <button id="light-theme" className="btn btn-light">
+                            <i className="bi bi-square"></i>
+                        </button>
+                        <button id="dark-theme" className="btn btn-light">
+                            <i className="bi bi-square-fill"></i>
+                        </button>
+                    </div>
+                    <div className="font-size-buttons">
+                        <button id="increase-font" className="btn btn-light">
+                            <i className="bi bi-zoom-in"></i>
+                        </button>
+                        <button id="decrease-font" className="btn btn-light">
+                            <i className="bi bi-zoom-out"></i>
+                        </button>
                     </div>
                 </aside>
                 <hr />
