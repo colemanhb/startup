@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './app.css';
@@ -16,17 +16,52 @@ function App() {
   const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
   const currentAuthState = username ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const sidebarRef = React.useRef(null);
+  const menuButtonRef = React.useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+        if (
+            isSidebarOpen &&
+            sidebarRef.current &&
+            !sidebarRef.current.contains(event.target) &&
+            menuButtonRef.current &&
+            !menuButtonRef.current.contains(event.target)
+        ) {
+            setIsSidebarOpen(false);
+        }
+    }
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+        document.removeEventListener('click', handleClickOutside);
+    };
+}, [isSidebarOpen]);
+
   return (
     <BrowserRouter>
         <div className="body bg-light text-dark">
             <header>
                 <div className="main-buttons">
-                    <button id="menu-button" className="btn btn-light">☰</button>
+                    <button 
+                        ref={menuButtonRef} 
+                        id="menu-button" 
+                        className="btn btn-light"
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                        ☰
+                    </button>
                     <button id="settings-button" className="btn btn-light">
                     <i className="bi bi-gear"></i>
                     </button> 
                 </div>
-                <nav id="sidebar" className="open">
+                <nav 
+                    ref={sidebarRef}
+                    id="sidebar" 
+                    className={isSidebarOpen ? 'open' : ''}
+                >
                     <h2>LibreBoox</h2>
                     <menu>
                     <li><NavLink to="/">Home</NavLink></li>
