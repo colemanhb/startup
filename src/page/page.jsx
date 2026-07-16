@@ -1,8 +1,20 @@
 import { Prev } from 'react-bootstrap/esm/PageItem';
 import './page.css';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { rawBookText } from './don_quixote';
 
+const dict = {
+  libro: {
+    definition: "A set of handwritten or printed sheets of paper that, when sewn or bound together, form a volume.",
+    translatedDefinition: "Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen.",
+    translation: "Book"
+  },
+  lugar: {
+    definition: "A particular position or point in space.",
+    translatedDefinition: "Una posición o punto particular en el espacio.",
+    translation: "Place"
+  },
+}
 
 export function paginateText(text, wordsPerPage = 700) {
   if (!text) return ["No centent available."];
@@ -26,6 +38,32 @@ export function Page() {
     localStorage.setItem('currentBookProgress', currentPage);
   }, [currentPage]);
 
+  const [selectedWord, setSelectedWord] = useState(null);
+  const [popupData, setPopupData] = useState(null);
+  const [popupLocation, setPopupLocation] = useState({ top: 0, left: 0 });
+  const dialogRef = useRef(null);
+
+  const handleWordClick = (event, rawWord) => {
+    const cleanWord = rawWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "").toLowerCase();
+    const data = dict[cleanWord] || {
+      definition: "Definition not found.",
+      translatedDefinition: "Definición no encontrada.",
+      translation: "Translation not found."
+    };
+    const rect = event.target.getBoundingClientRect();
+    setSelectedWord(cleanWord);
+    setPopupData(data);
+    setPopupLocation({ 
+      top: rect.bottom + window.scrollY + 10,
+      left: rect.left + window.scrollX - 50
+     });
+  };
+
+  const closePopup = () => {
+    setSelectedWord(null);
+    setPopupData(null);
+  }
+
   const goToNextPage = () => {
     if (currentPage < pages.length - 1) {
       setCurrentPage(prev => prev + 1);
@@ -43,7 +81,16 @@ export function Page() {
           <h4>Miguel de Cervantes</h4>
         </div>
         <p>
-          {pages[currentPage] || "No content available."}
+          {pages[currentPage].split(/\s+/).map((word, index) => (
+            <span 
+              key={index}
+              onClick={(e) => handleWordClick(e, word)}
+              style={{ cursor: 'pointer' }}
+              className="clickable-word"
+            >
+              {word}{" "}
+            </span>
+          ))}
         </p>
         <div className="page-controls">
             <button 
@@ -62,14 +109,24 @@ export function Page() {
               <i className="bi bi-chevron-right"></i>
             </button>
         </div>
-        <dialog id="popup">
-            <h3 id="word">Libro</h3>
-            <p id="definition">Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen:</p>
-            <p id="translated-definition">A set of handwritten or printed sheets of paper that, when sewn or bound together, form a volume:</p>
-            <p id="translation">Book</p>
-            <button id="close-popup" className="btn btn-light">Close</button>
-            <button id="save-word" className="btn btn-light">Save Word</button>
-        </dialog>
+        {selectedWord && popupData && (
+          <dialog 
+            ref={dialogRef}
+            open
+            id="popup"
+          >
+              <h3 id="word">{selectedWord}</h3>
+              <p id="definition">{popupData.definition}</p>
+              <p id="translated-definition">{popupData.translatedDefinition}</p>
+              <p id="translation">{popupData.translation}</p>
+              <button id="close-popup" className="btn btn-light" onClick={closePopup}>
+                Close
+              </button>
+              <button id="save-word" className="btn btn-light">
+                Save Word
+              </button>
+          </dialog>
+        )}
     </main>
   );
 }

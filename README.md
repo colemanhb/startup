@@ -117,8 +117,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] **All functionality implemented or mocked out** - I used React extensively to make my buttons work and allow the user to customize the site.
+- [x] **Hooks** - I used useEffect to save book progress and save time when the website changes between light mode and dark mode.
 
 ## 🚀 Service deliverable
 
