@@ -1,3 +1,7 @@
+:root {
+    --font-scale: 1.0;
+}
+
 @font-face {
   font-family: 'Archivo-Black';
   src: url('https://fonts.googleapis.com/css2?family=Archivo+Black:wght@400&display=swap');
@@ -199,28 +203,28 @@ form .create:hover {
 }
 
 p {
-    font-size: 1rem;
+    font-size: calc(var(--font-scale) * 1rem) !important;
     font-family: 'times new roman', serif;
 }
 
 h1 {
-    font-size: 3rem;
+    font-size: calc(var(--font-scale) * 3rem);
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: calc(var(--font-scale) * 2rem);
 }
 
 h3 {
-    font-size: 1.5rem;
+    font-size: calc(var(--font-scale) * 1.5rem);
 }
 
 li {
-    font-size: 2rem;
+    font-size: calc(var(--font-scale) * 2rem);
 }
 
 header li {
-    font-size: 1.5rem;
+    font-size: calc(var(--font-scale) * 1.5rem);
 }
 
 button {

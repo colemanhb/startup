@@ -26,6 +26,15 @@ function App() {
   const settingsButtonRef = React.useRef(null);
 
   const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light');
+  const [fontSize, setFontSize] = useState(parseFloat(localStorage.getItem('fontSize')) || 1.0);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--font-scale', fontSize);
+    localStorage.setItem('fontSize', fontSize);
+  }, [fontSize]);
+
+  const increaseFont = () => setFontSize(prevSize => Math.min(prevSize + 0.1, 2.0));
+  const decreaseFont = () => setFontSize(prevSize => Math.max(prevSize - 0.1, 1.0));
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
@@ -126,10 +135,18 @@ function App() {
                         </button>
                     </div>
                     <div className="font-size-buttons">
-                        <button id="increase-font" className="btn btn-light">
+                        <button 
+                            id="increase-font" 
+                            className="btn btn-light" 
+                            onClick={increaseFont}
+                        >
                             <i className="bi bi-zoom-in"></i>
                         </button>
-                        <button id="decrease-font" className="btn btn-light">
+                        <button 
+                            id="decrease-font" 
+                            className="btn btn-light" 
+                            onClick={decreaseFont}
+                        >
                             <i className="bi bi-zoom-out"></i>
                         </button>
                     </div>
