@@ -1,24 +1,64 @@
+import { Prev } from 'react-bootstrap/esm/PageItem';
 import './page.css';
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { rawBookText } from './don_quixote';
+
+
+export function paginateText(text, wordsPerPage = 700) {
+  if (!text) return ["No centent available."];
+
+  const words = text.split(/\s+/);
+  const pages = [];
+  for (let i = 0; i < words.length; i += wordsPerPage) {
+    const page = words.slice(i, i + wordsPerPage).join(' ');
+    pages.push(page);
+  }
+  return pages;
+}
 
 export function Page() {
+  const pages = useMemo(() => paginateText(rawBookText), []);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = localStorage.getItem('currentBookProgress');
+    return savedPage ? parseInt(savedPage, 10) : 0;
+  });
+  useEffect(() => {
+    localStorage.setItem('currentBookProgress', currentPage);
+  }, [currentPage]);
+
+  const goToNextPage = () => {
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+  const goToPrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(prev => prev - 1);
+    }
+  };
   return (
     <main className="page">
         <div className="title-author">
           <h4>Don Quixote</h4>
           <h4>Miguel de Cervantes</h4>
         </div>
-        <p>Desocupado lector: sin juramento me podrás creer que quisiera que este libro, como hijo del entendimiento, fuera el más hermoso, el más gallardo y más discreto que pudiera imaginarse. Pero no he podido yo contravenir al orden de naturaleza; que en ella cada cosa engendra su semejante. Y así, ¿qué podrá engendrar el estéril y mal cultivado ingenio mío, sino la historia de un hijo seco, avellanado, antojadizo y lleno de pensamientos varios y nunca imaginados de otro alguno, bien como quien se engendró en una cárcel, donde toda incomodidad tiene su asiento y donde todo triste ruido hace su habitación? El sosiego, el lugar apacible, la amenidad de los campos, la serenidad de los cielos, el murmurar de las fuentes, la quietud del espíritu son grande parte para que las musas más estériles se muestren fecundas y ofrezcan partos al mundo que le colmen de maravilla y de contento. Acontece tener un padre un hijo feo y sin gracia alguna, y el amor que le tiene le pone una venda en los ojos para que no vea sus faltas, antes las juzga por discreciones y lindezas y las cuenta a sus amigos por agudezas y donaires. Pero yo, que, aunque parezco padre, soy padrastro de Don Quijote, no quiero irme con la corriente del uso, ni suplicarte, casi con las lágrimas en los ojos, como otros hacen, lector carísimo, que perdones o disimules las faltas que en este mi hijo vieres; y ni eres su pariente ni su amigo, y tienes tu alma en tu cuerpo y tu libre albedrío como el más pintado, y estás en tu casa, donde eres señor della, como el rey de sus alcabalas, y sabes lo que comúnmente se dice: que debajo de mi manto, al rey mato. Todo lo cual te esenta y hace libre de todo respecto y obligación; y así, puedes decir de la historia todo aquello que te pareciere, sin temor que te calunien por el mal ni te premien por el bien que dijeres della.
-
-Sólo quisiera dártela monda y desnuda, sin el ornato de prólogo, ni de la inumerabilidad y catálogo de los acostumbrados sonetos, epigramas y elogios que al principio de los libros suelen ponerse. Porque te sé decir que, aunque me costó algún trabajo componerla, ninguno tuve por mayor que hacer esta prefación que vas leyendo. Muchas veces tomé la pluma para escribille, y muchas la dejé, por no saber lo que escribiría; y, estando una suspenso, con el papel delante, la pluma en la oreja, el codo en el bufete y la mano en la mejilla, pensando lo que diría, entró a deshora un amigo mío, gracioso y bien entendido, el cual, viéndome tan imaginativo, me preguntó la causa; y, no encubriéndosela yo, le dije que pensaba en el prólogo que había de hacer a la historia de don Quijote, y que me tenía de suerte que ni quería hacerle, ni menos sacar a luz las hazañas de tan noble caballero.
-
-— Porque, ¿cómo queréis vos que no me tenga confuso el qué dirá el antiguo legislador que llaman vulgo cuando vea que, al cabo de tantos años como ha que duermo en el silencio del olvido, salgo ahora, con todos mis años a cuestas, con una leyenda seca como un esparto, ajena de invención, menguada de estilo, pobre de concetos y falta de toda erudición y doctrina; sin acotaciones en las márgenes y sin anotaciones en el fin del libro, como veo que están otros libros, aunque sean fabulosos y profanos, tan llenos de sentencias de Aristóteles, de Platón y de toda la caterva de filósofos, que admiran a los leyentes y tienen a sus autores por hombres leídos, eruditos y elocuentes? ¡Pues qué, cuando citan la Divina Escritura! No dirán sino que son unos santos Tomases y otros doctores de la Iglesia; guardando en esto un decoro tan ingenioso, que en un renglón han pintado un enamorado destraído y en otro hacen un sermoncico cristiano, que es un contento y un regalo oílle o leelle. De todo esto ha de carecer mi libro, porque ni tengo qué acotar en el margen, ni qué anotar en el fin, ni menos sé qué autores sigo en él, para ponerlos al principio, como hacen todos, por las letras del A.B.C., comenzando en Aristóteles y acabando en Xenofonte y en Zoílo o Zeuxis, aunque fue maldiciente el uno y pintor el otro. También ha de carecer mi libro de sonetos al principio, a lo menos de sonetos cuyos autores sean duques, marqueses, condes, obispos, damas o poetas celebérrimos; aunque, si yo los pidiese a dos o tres oficiales amigos, yo sé que me los darían, y tales, que no les igualasen los de aquellos que tienen más nombre en nuestra España. En fin, señor y amigo mío —proseguí—, yo determino que el señor don Quijote se quede sepultado en sus archivos en la Mancha, hasta que el cielo depare quien le adorne de tantas cosas como le faltan; porque yo me hallo incapaz de remediarlas, por mi insuficiencia y pocas letras, y porque naturalmente soy poltrón y perezoso de andarme buscando autores que digan lo que yo me sé decir sin ellos. De aquí nace la suspensión y elevamiento, amigo, en que me hallastes; bastante causa para ponerme en ella la que de mí habéis oído.</p>
+        <p>
+          {pages[currentPage] || "No content available."}
+        </p>
         <div className="page-controls">
-            <button id="prev-page" className="btn btn-light">
+            <button 
+              id="prev-page" 
+              className="btn btn-light"
+              onClick={goToPrevPage}
+              disabled={currentPage === 0}>
               <i className="bi bi-chevron-left"></i>
             </button>
-            <span id="page-number">Page 1</span>
-            <button id="next-page" className="btn btn-light">
+            <span id="page-number">Page {currentPage + 1} of {pages.length}</span>
+            <button 
+              id="next-page" 
+              className="btn btn-light"
+              onClick={goToNextPage}
+              disabled={currentPage === pages.length - 1}>
               <i className="bi bi-chevron-right"></i>
             </button>
         </div>
