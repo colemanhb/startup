@@ -9,7 +9,7 @@ export function Login({ username, authState, onAuthChange }) {
   const [justLoggedIn, setJustLoggedIn] = React.useState(false);
 
   if (justLoggedIn && authState === AuthState.Authenticated) {
-    return <Navigate to="/languages" push />;
+    return <Navigate to="/booklist" push />;
   }
   return (
     <main className='login'>
