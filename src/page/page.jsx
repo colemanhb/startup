@@ -4,22 +4,6 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { rawBookText } from './don_quixote';
 import { useNavigate } from 'react-router-dom';
 
-export function saveWord(word, definition) {
-  const dict = fetch('/api/words')
-    .then(response => response.json())
-    .then(data => {
-      const dict = {};
-      data.forEach(entry => {
-        dict[entry.word.toLowerCase()] = entry;
-      });
-      return dict;
-    })
-    .catch(error => {
-      console.error('Error fetching dictionary:', error);
-      return {};
-    });
-  }
-
 export function paginateText(text, wordsPerPage = 700) {
   if (!text) return ["No centent available."];
 
@@ -69,7 +53,7 @@ export function Page() {
         const data = await response.json();
         setUserWords(data.words);
       } else if (response.status === 401) {
-        navigate('/login')
+        navigate('/');
       }
     } catch (error) {
       console.error('Error saving word:', error);

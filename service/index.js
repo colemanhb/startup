@@ -74,7 +74,7 @@ apiRouter.post('/word', verifyAuth, async (req, res) => {
 });
 
 apiRouter.get('/words', verifyAuth, async (req, res) => {
-  res.send(savedwords || {});
+  res.send(savedWords || {});
 }) 
 
 // DeleteAuth logout a user
