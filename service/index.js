@@ -52,6 +52,22 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized' });
 });
 
+//Saving and storing words
+let savedWords = {};
+apiRouter.post('/word', verifyAuth, async (req, res) => {
+  const {word} = req.body.word;
+  const {definition} = req.body.definition;
+  if (!word || !definition) {
+    return res.status(400).send({ msg: 'Missing word or definition' });
+  }
+  savedWords[word] = definition;
+  res.send({ msg: 'Word saved', words: savedWords });
+});
+
+apiRouter.get('/words', verifyAuth, async (req, res) => {
+  res.send(savedwords || {});
+}) 
+
 // DeleteAuth logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
