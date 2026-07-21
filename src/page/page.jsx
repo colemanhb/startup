@@ -2,19 +2,23 @@ import { Prev } from 'react-bootstrap/esm/PageItem';
 import './page.css';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { rawBookText } from './don_quixote';
+import { useNavigate } from 'react-router-dom';
 
-const dict = {
-  libro: {
-    definition: "A set of handwritten or printed sheets of paper that, when sewn or bound together, form a volume.",
-    translatedDefinition: "Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen.",
-    translation: "Book"
-  },
-  lugar: {
-    definition: "A particular position or point in space.",
-    translatedDefinition: "Una posición o punto particular en el espacio.",
-    translation: "Place"
-  },
-}
+export function saveWord(word, definition) {
+  const dict = fetch('/api/words')
+    .then(response => response.json())
+    .then(data => {
+      const dict = {};
+      data.forEach(entry => {
+        dict[entry.word.toLowerCase()] = entry;
+      });
+      return dict;
+    })
+    .catch(error => {
+      console.error('Error fetching dictionary:', error);
+      return {};
+    });
+  }
 
 export function paginateText(text, wordsPerPage = 700) {
   if (!text) return ["No centent available."];
@@ -29,6 +33,16 @@ export function paginateText(text, wordsPerPage = 700) {
 }
 
 export function Page() {
+  const [userWords, setUserWords] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/words')
+      .then(response => response.json())
+      .then(words => {setUserWords(words);})
+      .catch((err) => console.error('Error fetching user words:', err)
+    );
+  }, []);
+
   const pages = useMemo(() => paginateText(rawBookText), []);
   const [currentPage, setCurrentPage] = useState(() => {
     const savedPage = localStorage.getItem('currentBookProgress');
@@ -42,10 +56,29 @@ export function Page() {
   const [popupData, setPopupData] = useState(null);
   const [popupLocation, setPopupLocation] = useState({ top: 0, left: 0 });
   const dialogRef = useRef(null);
+  const navigate = useNavigate();
+
+  async function handleSaveWord() {
+    try {
+      const response = await fetch('/api/word', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUserWords(data.words);
+      } else if (response.status === 401) {
+        navigate('/login')
+      }
+    } catch (error) {
+      console.error('Error saving word:', error);
+    }
+  }
 
   const handleWordClick = (event, rawWord) => {
     const cleanWord = rawWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "").toLowerCase();
-    const data = dict[cleanWord] || {
+    const data = {
       definition: "Definition not found.",
       translatedDefinition: "Definición no encontrada.",
       translation: "Translation not found."
@@ -122,7 +155,10 @@ export function Page() {
               <button id="close-popup" className="btn btn-light" onClick={closePopup}>
                 Close
               </button>
-              <button id="save-word" className="btn btn-light">
+              <button 
+                id="save-word" 
+                className="btn btn-light"
+                onClick={handleSaveWord}>
                 Save Word
               </button>
           </dialog>
