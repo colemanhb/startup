@@ -77,6 +77,23 @@ apiRouter.get('/words', verifyAuth, async (req, res) => {
   res.send(savedWords || {});
 }) 
 
+let bookProgress = {};
+apiRouter.post('/progress', async (req, res) => {
+  const { bookId, page } = req.body;
+  if (!bookId || page === undefined) {
+    return res.status(400).send({ msg: 'Missing bookId or page' });
+  }
+  const stringId = String(bookId);
+  bookProgress[stringId] = page;
+  res.send({ msg: 'Progress saved', progress: bookProgress });
+});
+
+apiRouter.get('/progress/:bookId', async (req, res) => {
+  const stringId = String(req.params.bookId);
+  const progress = (stringId in bookProgress) ? bookProgress[stringId] : 0;
+  res.send({ progress });
+});
+
 apiRouter.get('/gutenberg/:id', async (req, res) => {
   const id = req.params.id;
   const url = `https://www.gutenberg.org/cache/epub/${id}/pg${id}.txt`;

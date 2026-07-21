@@ -1,7 +1,5 @@
-import { Prev } from 'react-bootstrap/esm/PageItem';
 import './page.css';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const DEFAULT_BOOK = { 
@@ -54,59 +52,70 @@ export function paginateText(text, wordsPerPage = 700) {
 
 export function Page() {
   const navigate = useNavigate();
-
   const location = useLocation();
 
   const selectedBook = location.state?.book || DEFAULT_BOOK;
 
   const [rawBookText, setRawBookText] = useState('');
   const [loading, setLoading] = useState(true);
-  
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = localStorage.getItem(`progress_${selectedBook.id}`);
-    return savedPage ? parseInt(savedPage, 10) : 0;
-  });
+  const [currentPage, setCurrentPage] = useState(0);
 
-  // Re-fetch text whenever the book ID changes
+  const initialLoadDone = useRef(false);
+
   useEffect(() => {
-    async function loadText() {
+    let isMounted = true;
+    initialLoadDone.current = false;
+
+    async function loadBookData() {
       setLoading(true);
-      const text = await getText(selectedBook.id);
-      setRawBookText(text);
-      setLoading(false);
-      
-      const savedPage = localStorage.getItem(`progress_${selectedBook.id}`);
-      setCurrentPage(savedPage ? parseInt(savedPage, 10) : 0);
+
+      try {
+        const [text, progressRes] = await Promise.all([
+          getText(selectedBook.id),
+          fetch(`/api/progress/${selectedBook.id}`)
+            .then(res => res.ok ? res.json() : { progress: 0 })
+            .catch(() => ({ progress: 0 }))
+        ]);
+
+        if (isMounted) {
+          const savedPage = Number(progressRes.progress) || 0;
+          setRawBookText(text);
+          setCurrentPage(savedPage);
+          setLoading(false);
+          
+          setTimeout(() => {
+            if (isMounted) initialLoadDone.current = true;
+          }, 100);
+        }
+      } catch (error) {
+        console.error('Error loading book text or progress:', error);
+        if (isMounted) setLoading(false);
+      }
     }
-    loadText();
+
+    loadBookData();
+
+    return () => { isMounted = false; };
   }, [selectedBook.id]);
-
-  const [userWords, setUserWords] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/words')
-      .then(response => response.json())
-      .then(words => { setUserWords(words); })
-      .catch((err) => console.error('Error fetching user words:', err));
-  }, []);
 
   const pages = useMemo(() => {
     if (!rawBookText) return ["No content available."];
     return paginateText(rawBookText);
   }, [rawBookText]);
 
-  // Adjust bounds and save book-specific progress
   useEffect(() => {
-    if (currentPage >= pages.length && pages.length > 0) {
-      setCurrentPage(0);
-    } else {
-      localStorage.setItem(`progress_${selectedBook.id}`, currentPage);
-    }
-  }, [currentPage, pages, selectedBook.id]);
+    if (loading || !initialLoadDone.current) return;
+
+    fetch('/api/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bookId: selectedBook.id, page: currentPage })
+    }).catch(error => console.error('Error saving progress:', error));
+
+  }, [currentPage, loading, selectedBook.id]);
 
   const [selectedWord, setSelectedWord] = useState(null);
   const [popupData, setPopupData] = useState(null);
-  const [popupLocation, setPopupLocation] = useState({ top: 0, left: 0 });
   const dialogRef = useRef(null);
 
   const closePopup = () => {
@@ -122,8 +131,6 @@ export function Page() {
         body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
       });
       if (response.ok) {
-        const data = await response.json();
-        setUserWords(data.words);
         closePopup();
       } else if (response.status === 401) {
         navigate('/');
@@ -140,19 +147,15 @@ export function Page() {
       translatedDefinition: "Definición no encontrada.",
       translation: "Translation not found."
     };
-    const rect = event.target.getBoundingClientRect();
+
     setSelectedWord(cleanWord);
     setPopupData(data);
-    setPopupLocation({ 
-      top: rect.bottom + window.scrollY + 10,
-      left: rect.left + window.scrollX - 50
-    });
 
     try {
       const response = await fetch(`https://freedictionaryapi.com/api/v1/entries/${selectedBook.lang}/${cleanWord}`);
       if (response.ok) {
-        const data = await response.json();
-        const firstEntry = data.entries?.[0];
+        const resultData = await response.json();
+        const firstEntry = resultData.entries?.[0];
         const firstSense = firstEntry?.senses?.[0];
         const definitionText = firstSense?.definition || "Definition not found.";
 
@@ -186,58 +189,58 @@ export function Page() {
 
   return (
     <main className="page">
-        <div className="title-author">
-          <h4>{selectedBook.title}</h4>
-          <h4>{selectedBook.author}</h4>
-        </div>
-        <p>
-          {activePageText.split(/\s+/).map((word, index) => (
-            <span 
-              key={index}
-              onClick={(e) => handleWordClick(e, word)}
-              style={{ cursor: 'pointer' }}
-              className="clickable-word"
-            >
-              {word}{" "}
-            </span>
-          ))}
-        </p>
-        <div className="page-controls">
-            <button 
-              id="prev-page" 
-              className="btn btn-light"
-              onClick={goToPrevPage}
-              disabled={currentPage === 0}>
-              <i className="bi bi-chevron-left"></i>
-            </button>
-            <span id="page-number">Page {currentPage + 1} of {pages.length}</span>
-            <button 
-              id="next-page" 
-              className="btn btn-light"
-              onClick={goToNextPage}
-              disabled={currentPage === pages.length - 1}>
-              <i className="bi bi-chevron-right"></i>
-            </button>
-        </div>
-        {selectedWord && popupData && (
-          <dialog 
-            ref={dialogRef}
-            open
-            id="popup"
+      <div className="title-author">
+        <h4>{selectedBook.title}</h4>
+        <h4>{selectedBook.author}</h4>
+      </div>
+      <p>
+        {activePageText.split(/\s+/).map((word, index) => (
+          <span 
+            key={index}
+            onClick={(e) => handleWordClick(e, word)}
+            style={{ cursor: 'pointer' }}
+            className="clickable-word"
           >
-              <h3 id="word">{selectedWord} ({selectedBook.lang.toUpperCase()})</h3>
-              <p id="definition">{popupData.definition}</p>
-              <button id="close-popup" className="btn btn-light" onClick={closePopup}>
-                Close
-              </button>
-              <button 
-                id="save-word" 
-                className="btn btn-light"
-                onClick={handleSaveWord}>
-                Save Word
-              </button>
-          </dialog>
-        )}
+            {word}{" "}
+          </span>
+        ))}
+      </p>
+      <div className="page-controls">
+        <button 
+          id="prev-page" 
+          className="btn btn-light"
+          onClick={goToPrevPage}
+          disabled={currentPage === 0}>
+          <i className="bi bi-chevron-left"></i>
+        </button>
+        <span id="page-number">Page {currentPage + 1} of {pages.length}</span>
+        <button 
+          id="next-page" 
+          className="btn btn-light"
+          onClick={goToNextPage}
+          disabled={currentPage === pages.length - 1}>
+          <i className="bi bi-chevron-right"></i>
+        </button>
+      </div>
+      {selectedWord && popupData && (
+        <dialog 
+          ref={dialogRef}
+          open
+          id="popup"
+        >
+          <h3 id="word">{selectedWord} ({selectedBook.lang.toUpperCase()})</h3>
+          <p id="definition">{popupData.definition}</p>
+          <button id="close-popup" className="btn btn-light" onClick={closePopup}>
+            Close
+          </button>
+          <button 
+            id="save-word" 
+            className="btn btn-light"
+            onClick={handleSaveWord}>
+            Save Word
+          </button>
+        </dialog>
+      )}
     </main>
   );
 }
