@@ -1,67 +1,90 @@
 import './new_words.css';
 import React, { useEffect, useState } from 'react';
 
-const other_dict = {
-  maison: {
-    definition: "A building for human habitation, especially one that is lived in by a family or small group of people.",
-  },
-  ville: {
-    definition: "A large town.",
-  },
-};
-
 export function Authenticated() {
-  // Initialize state as an empty object or array safely
-  const [userWords, setUserWords] = useState([]);
+  const [userWords, setUserWords] = useState({});
+  const [friendsWords, setFriendsWords] = useState({});
+  const [loading, setLoading] = useState(true);
   const [wordSet, setWordSet] = useState('myWords');
 
   useEffect(() => {
     fetch('/api/words')
       .then((response) => response.json())
       .then((data) => {
-        const wordsData = data.words || data || [];
-        setUserWords(wordsData);
+        setUserWords(data.myWords || {});
+        setFriendsWords(data.friendsWords || {});
       })
-      .catch((err) => console.error('Error fetching user words:', err));
+      .catch((err) => console.error('Error fetching words:', err))
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <main className="new-words">
+        <p>Loading words...</p>
+      </main>
+    );
+  }
 
   const renderRows = () => {
     if (wordSet === 'friendsWords') {
-      return Object.entries(other_dict).map(([word, item]) => (
-        <tr key={word}>
-          <td>{word}</td>
-          <td>{item.definition}</td>
-        </tr>
-      ));
+      const globalRows = [];
+
+      Object.entries(friendsWords).forEach(([username, wordsDict]) => {
+        if (wordsDict && typeof wordsDict === 'object') {
+          Object.entries(wordsDict).forEach(([word, def]) => {
+            globalRows.push(
+              <tr key={`${username}-${word}`}>
+                <td>
+                  <span className="badge bg-secondary">{username}</span>
+                </td>
+                <td><strong>{word}</strong></td>
+                <td>{typeof def === 'string' ? def : def.definition}</td>
+              </tr>
+            );
+          });
+        }
+      });
+
+      if (globalRows.length === 0) {
+        return (
+          <tr>
+            <td colSpan="3" className="text-center text-muted">
+              No global words saved yet.
+            </td>
+          </tr>
+        );
+      }
+
+      return globalRows;
     }
 
-    if (Array.isArray(userWords)) {
-      return userWords.map((item, index) => (
-        <tr key={item.id || item.word || index}>
-          <td>{item.word}</td>
-          <td>{item.definition}</td>
+    const myEntries = Object.entries(userWords);
+
+    if (myEntries.length === 0) {
+      return (
+        <tr>
+          <td colSpan="2" className="text-center text-muted">
+            You haven't saved any words yet!
+          </td>
         </tr>
-      ));
+      );
     }
 
-    if (typeof userWords === 'object' && userWords !== null) {
-      return Object.entries(userWords).map(([word, item]) => (
-        <tr key={word}>
-          <td>{word}</td>
-          <td>{typeof item === 'string' ? item : item.definition}</td>
-        </tr>
-      ));
-    }
-
-    return null;
+    return myEntries.map(([word, def]) => (
+      <tr key={word}>
+        <td><strong>{word}</strong></td>
+        <td>{typeof def === 'string' ? def : def.definition}</td>
+      </tr>
+    ));
   };
 
   return (
     <main className="new-words">
-      <div className="new-words-controls">
+      <div className="new-words-controls mb-3">
         <button
           id="my-words"
-          className={`btn ${wordSet === 'myWords' ? 'btn-primary' : 'btn-light'}`}
+          className={`btn me-2 ${wordSet === 'myWords' ? 'btn-primary' : 'btn-light'}`}
           onClick={() => setWordSet('myWords')}
         >
           My Words
@@ -71,12 +94,15 @@ export function Authenticated() {
           className={`btn ${wordSet === 'friendsWords' ? 'btn-primary' : 'btn-light'}`}
           onClick={() => setWordSet('friendsWords')}
         >
-          My Friends' Words
+          Global Words
         </button>
       </div>
+
       <table className="table table-bordered">
         <thead>
           <tr>
+            {/* Show User column only when viewing Global Words */}
+            {wordSet === 'friendsWords' && <th>User</th>}
             <th>Word</th>
             <th>Definition</th>
           </tr>

@@ -69,12 +69,27 @@ apiRouter.post('/word', verifyAuth, async (req, res) => {
   if (!word || !definition) {
     return res.status(400).send({ msg: 'Missing word or definition' });
   }
-  savedWords[word] = definition;
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (!user) {
+    return res.status(401).send({ msg: 'Unauthorized' });
+  }
+  if (!savedWords[user.username]) {
+    savedWords[user.username] = {};
+  }
+  savedWords[user.username][word] = definition;
   res.send({ msg: 'Word saved', words: savedWords });
 });
 
 apiRouter.get('/words', verifyAuth, async (req, res) => {
-  res.send(savedWords || {});
+  const username = (await findUser('token', req.cookies[authCookieName]))?.username;
+  const myWords = savedWords[username] || {};
+  const friendsWords = {};
+  for (const [user, words] of Object.entries(savedWords)) {
+    if (user !== username) {
+      friendsWords[user] = words;
+    }
+  }
+  res.send({ myWords, friendsWords });
 }) 
 
 let bookProgress = {};
