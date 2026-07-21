@@ -60,7 +60,7 @@ export function Page() {
     }
   }
 
-  const handleWordClick = (event, rawWord) => {
+  const handleWordClick = async (event, rawWord) => {
     const cleanWord = rawWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "").toLowerCase();
     const data = {
       definition: "Definition not found.",
@@ -74,6 +74,23 @@ export function Page() {
       top: rect.bottom + window.scrollY + 10,
       left: rect.left + window.scrollX - 50
      });
+
+     try {
+      const response = await fetch(`https://freedictionaryapi.com/api/v1/entries/es/${cleanWord}`);
+      if (response.ok) {
+        const data = await response.json();
+        const firstEntry = data.entries?.[0];
+        const firstSense = firstEntry?.senses?.[0];
+        const definitionText = firstSense?.definition || "Definition not found.";
+
+        setPopupData({
+          definition: definitionText,
+          translation: cleanWord
+        });
+      }
+     } catch (err) {
+      console.error('Error fetching definition:', err);
+     }
   };
 
   const closePopup = () => {
