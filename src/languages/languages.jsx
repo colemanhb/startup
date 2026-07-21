@@ -10,9 +10,6 @@ const languages = [
   { name: 'Italian', id: 'italian' },
   { name: 'Portuguese', id: 'portuguese' },
   { name: 'Russian', id: 'russian' },
-  { name: 'Mandarin', id: 'mandarin' },
-  { name: 'Japanese', id: 'japanese' },
-  { name: 'Korean', id: 'korean' },
 ];
 
 export function Languages() {

@@ -77,6 +77,24 @@ apiRouter.get('/words', verifyAuth, async (req, res) => {
   res.send(savedWords || {});
 }) 
 
+apiRouter.get('/gutenberg/:id', async (req, res) => {
+  const id = req.params.id;
+  const url = `https://www.gutenberg.org/cache/epub/2000/pg2000.txt`;
+
+  try {
+    const response = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+    });
+    if (!response.ok) {
+      return res.status(404).send({ msg: 'Book not found' });
+    }
+    const rawText = await response.text();
+    res.send({ rawText });
+  } catch (err) {
+    console.error('Error fetching book:', err);
+    res.status(500).send({ msg: 'Error fetching book' });
+  }
+})
 // DeleteAuth logout a user
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
