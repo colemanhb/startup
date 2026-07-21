@@ -127,9 +127,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **Node.js/Express HTTP service** - I use Node.js and Express for logging in, similar to Simon
 - [x] **Static middleware for frontend** - Used express.static
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
+- [x] **Calls to third party endpoints** - I call to a public dictionary API
+- [x] **Backend service endpoints** - I have endpoints in index.js for book progress and settings
+- [x] **Frontend calls service endpoints** - My jsx pages call to these endpoints to change the settings and book progress
 - [x] **Supports registration, login, logout, and restricted endpoint** - My app supports all of these endpoints
 - [x] **Uses BCrypt to hash passwords** - I used BCrypt to hash passwords
 
