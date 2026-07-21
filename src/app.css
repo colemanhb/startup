@@ -20,6 +20,35 @@ html, .body {
     padding: 0;
 }
 
+/* Light Theme Variables */
+body.light, [data-bs-theme="light"] {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #212529;
+  --bs-border-color: #dee2e6;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+/* Dark Theme Variables */
+body.dark, [data-bs-theme="dark"] {
+  --bs-body-bg: #121212;
+  --bs-body-color: #e0e0e0;
+  --bs-border-color: #333333;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+/* Ensure links and headers in dark mode inherit contrast colors */
+body.dark a {
+  color: #ffffff;
+}
+
+body.dark dialog {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: 1px solid var(--bs-border-color);
+}
+
 .body { 
   min-height: 100vh;
   display: flex;
