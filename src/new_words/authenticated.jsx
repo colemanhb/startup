@@ -1,33 +1,26 @@
 import './new_words.css';
-import React from 'react';
-
-const my_dict = {
-  libro: {
-    definition: "A set of handwritten or printed sheets of paper that, when sewn or bound together, form a volume.",
-    translatedDefinition: "Conjunto de hojas de papel manuscritas o impresas que, cosidas o encuadernadas, forman un volumen.",
-    translation: "Book"
-  },
-  lugar: {
-    definition: "A particular position or point in space.",
-    translatedDefinition: "Una posición o punto particular en el espacio.",
-    translation: "Place"
-  },
-}
+import React, { useEffect } from 'react';
 
 const other_dict = {
   maison: {
-    definition: "A building for human habitation, especially one that is lived in by a family or small group of people.",
-    translatedDefinition: "Un edificio para la habitación humana, especialmente uno en el que vive una familia o un pequeño grupo de personas.",
-    translation: "House"
-  },
+    definition: "A building for human habitation, especially one that is lived in by a family or small group of people.",  },
   ville: {
     definition: "A large town.",
-    translatedDefinition: "Una ciudad grande.",
-    translation: "City"
   },
 }
 
 export function Authenticated() {
+  const [my_dict, setMyDict] = React.useState({});
+  
+  useEffect(() => {
+    fetch('/api/words')
+      .then(response => response.json())
+      .then(data => {
+        setMyDict(data.words);
+      })
+      .catch((err) => console.error('Error fetching user words:', err));
+  }, []);
+
   const [wordSet, setWordSet] = React.useState('myWords');
   return (
     <main className="new-words">
@@ -43,7 +36,6 @@ export function Authenticated() {
         <thead>
             <tr>
                 <th>Word</th>
-                <th>Translation</th>
                 <th>Definition</th>
             </tr>
         </thead>
@@ -51,13 +43,11 @@ export function Authenticated() {
           {wordSet === 'myWords' ? Object.entries(my_dict).map(([word, data]) => (
             <tr key={word}>
               <td>{word}</td>
-              <td>{data.translation}</td>
               <td>{data.definition}</td>
             </tr>
           )) : Object.entries(other_dict).map(([word, data]) => (
             <tr key={word}>
               <td>{word}</td>
-              <td>{data.translation}</td>
               <td>{data.definition}</td>
             </tr>
           ))}

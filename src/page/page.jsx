@@ -95,7 +95,7 @@ export function Page() {
     <main className="page">
         <div className="title-author">
           <h4>Don Quixote</h4>
-          <h4>Miguel de Cervantes</h4>
+          <h4>Miguel de Cervantes</h4>;
         </div>
         <p>
           {pages[currentPage].split(/\s+/).map((word, index) => (
@@ -134,8 +134,6 @@ export function Page() {
           >
               <h3 id="word">{selectedWord}</h3>
               <p id="definition">{popupData.definition}</p>
-              <p id="translated-definition">{popupData.translatedDefinition}</p>
-              <p id="translation">{popupData.translation}</p>
               <button id="close-popup" className="btn btn-light" onClick={closePopup}>
                 Close
               </button>
