@@ -5,7 +5,6 @@ import './app.css';
 
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { Languages } from './languages/languages';
 import { Page } from './page/page';
 import { NewWords } from './new_words/new_words';
 import { About } from './about/about';
@@ -107,7 +106,7 @@ function App() {
                     <h2>LibreBoox</h2>
                     <menu>
                     <li><NavLink to="/">Home</NavLink></li>
-                    <li><NavLink to="/languages">Languages</NavLink></li>
+                    <li><NavLink to="/booklist">Books</NavLink></li>
                     <li><NavLink to="/page">Continue Reading</NavLink></li>
                     <li><NavLink to="/new-words">New Words</NavLink></li>
                     <li><NavLink to="/about">About</NavLink></li>
@@ -168,7 +167,6 @@ function App() {
                         />} 
                         exact 
                 />
-                <Route path='/languages' element={<Languages />} />
                 <Route path='/page' element={<Page />} />
                 <Route 
                     path='/new-words' 

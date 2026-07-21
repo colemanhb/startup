@@ -25,11 +25,10 @@ export function Unauthenticated(props) {
         },
         });
         if (response?.status === 200) {
-        localStorage.setItem('username', username);
         props.onLogin(username);
         } else {
         const body = await response.json();
-        setDisplayError(`⚠ Error: ${body.msg}`);
+        setDisplayError(`Error: ${body.msg}`);
         }
     }
 

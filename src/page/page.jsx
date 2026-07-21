@@ -3,6 +3,13 @@ import './page.css';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const DEFAULT_BOOK = { 
+  id: 2000, 
+  title: "Don Quijote", 
+  author: "Miguel de Cervantes", 
+  lang: "es" 
+};
+
 export async function getText(bookID = 996) {
   try {
     const response = await fetch(`/api/gutenberg/${bookID}`);
@@ -45,18 +52,22 @@ export function paginateText(text, wordsPerPage = 700) {
 }
 
 export function Page() {
+  const location = useLocation();
+
+  const selectedBook = location.state?.book || DEFAULT_BOOK;
+
   const [rawBookText, setRawBookText] = useState('');
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     async function loadText() {
       setLoading(true);
-      const text = await getText(996);
+      const text = await getText(selectedBook.id);
       setRawBookText(text);
       setLoading(false);
     }
     loadText();
-  }, []);
+  }, [selectedBook.title]);
 
   const [userWords, setUserWords] = useState([]);
 
@@ -132,7 +143,7 @@ export function Page() {
     });
 
     try {
-      const response = await fetch(`https://freedictionaryapi.com/api/v1/entries/en/${cleanWord}`);
+      const response = await fetch(`https://freedictionaryapi.com/api/v1/entries/${selectedBook.lang}/${cleanWord}`);
       if (response.ok) {
         const data = await response.json();
         const firstEntry = data.entries?.[0];
@@ -171,8 +182,8 @@ export function Page() {
   return (
     <main className="page">
         <div className="title-author">
-          <h4>Don Quixote</h4>
-          <h4>Miguel de Cervantes</h4>
+          <h4>{selectedBook.title}</h4>
+          <h4>{selectedBook.author}</h4>
         </div>
         <p>
           {activePageText.split(/\s+/).map((word, index) => (
