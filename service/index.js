@@ -79,7 +79,7 @@ apiRouter.get('/words', verifyAuth, async (req, res) => {
 
 apiRouter.get('/gutenberg/:id', async (req, res) => {
   const id = req.params.id;
-  const url = `https://www.gutenberg.org/cache/epub/2000/pg2000.txt`;
+  const url = `https://www.gutenberg.org/cache/epub/${id}/pg${id}.txt`;
 
   try {
     const response = await fetch(url, {

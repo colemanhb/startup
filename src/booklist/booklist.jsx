@@ -74,7 +74,7 @@ export function Booklist() {
         <li>
           <NavLink 
             to="/page" 
-            state={{ book: { id: 50285, title: "Aus dem Leben eines Taugenichts", author: "Joseph von Eichendorff", lang: "de" } }}
+            state={{ book: { id: 35312, title: "Aus dem Leben eines Taugenichts", author: "Joseph von Eichendorff", lang: "de" } }}
           >
             Aus dem Leben eines Taugenichts
           </NavLink>
@@ -82,7 +82,7 @@ export function Booklist() {
         <li>
           <NavLink 
             to="/page" 
-            state={{ book: { id: 35312, title: "Venus im Pelz", author: "Leopold von Sacher-Masoch", lang: "de" } }}
+            state={{ book: { id: 56156, title: "Venus im Pelz", author: "Leopold von Sacher-Masoch", lang: "de" } }}
           >
             Venus im Pelz
           </NavLink>
@@ -110,7 +110,7 @@ export function Booklist() {
         <li>
           <NavLink 
             to="/page" 
-            state={{ book: { id: 19517, title: "Le Avventure di Pinocchio", author: "Carlo Collodi", lang: "it" } }}
+            state={{ book: { id: 52484, title: "Le Avventure di Pinocchio", author: "Carlo Collodi", lang: "it" } }}
           >
             Le Avventure di Pinocchio
           </NavLink>
@@ -141,34 +141,6 @@ export function Booklist() {
             state={{ book: { id: 24919, title: "Amor Crioulo", author: "Lúcio de Mendonça", lang: "pt" } }}
           >
             Amor Crioulo
-          </NavLink>
-        </li>
-      </ul>
-
-      <h2 id="russian">Russian</h2>
-      <ul>
-        <li>
-          <NavLink 
-            to="/page" 
-            state={{ book: { id: 19681, title: "Детство", author: "Leo Tolstoy", lang: "ru" } }}
-          >
-            Детство
-          </NavLink>
-        </li>
-        <li>
-          <NavLink 
-            to="/page" 
-            state={{ book: { id: 21183, title: "Белые ночи", author: "Fyodor Dostoevsky", lang: "ru" } }}
-          >
-            Белые ночи
-          </NavLink>
-        </li>
-        <li>
-          <NavLink 
-            to="/page" 
-            state={{ book: { id: 21186, title: "Записки из подполья", author: "Fyodor Dostoevsky", lang: "ru" } }}
-          >
-            Записки из подполья
           </NavLink>
         </li>
       </ul>

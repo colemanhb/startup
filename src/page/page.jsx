@@ -1,7 +1,8 @@
 import { Prev } from 'react-bootstrap/esm/PageItem';
 import './page.css';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DEFAULT_BOOK = { 
   id: 2000, 
@@ -10,7 +11,7 @@ const DEFAULT_BOOK = {
   lang: "es" 
 };
 
-export async function getText(bookID = 996) {
+export async function getText(bookID) {
   try {
     const response = await fetch(`/api/gutenberg/${bookID}`);
     if (!response.ok) {
@@ -52,6 +53,8 @@ export function paginateText(text, wordsPerPage = 700) {
 }
 
 export function Page() {
+  const navigate = useNavigate();
+
   const location = useLocation();
 
   const selectedBook = location.state?.book || DEFAULT_BOOK;
@@ -59,15 +62,24 @@ export function Page() {
   const [rawBookText, setRawBookText] = useState('');
   const [loading, setLoading] = useState(true);
   
+  const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = localStorage.getItem(`progress_${selectedBook.id}`);
+    return savedPage ? parseInt(savedPage, 10) : 0;
+  });
+
+  // Re-fetch text whenever the book ID changes
   useEffect(() => {
     async function loadText() {
       setLoading(true);
       const text = await getText(selectedBook.id);
       setRawBookText(text);
       setLoading(false);
+      
+      const savedPage = localStorage.getItem(`progress_${selectedBook.id}`);
+      setCurrentPage(savedPage ? parseInt(savedPage, 10) : 0);
     }
     loadText();
-  }, [selectedBook.title]);
+  }, [selectedBook.id]);
 
   const [userWords, setUserWords] = useState([]);
 
@@ -83,25 +95,19 @@ export function Page() {
     return paginateText(rawBookText);
   }, [rawBookText]);
 
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = localStorage.getItem('currentBookProgress');
-    return savedPage ? parseInt(savedPage, 10) : 0;
-  });
-
-  // Automatically adjust currentPage if it's beyond the length of pages array
+  // Adjust bounds and save book-specific progress
   useEffect(() => {
     if (currentPage >= pages.length && pages.length > 0) {
       setCurrentPage(0);
     } else {
-      localStorage.setItem('currentBookProgress', currentPage);
+      localStorage.setItem(`progress_${selectedBook.id}`, currentPage);
     }
-  }, [currentPage, pages]);
+  }, [currentPage, pages, selectedBook.id]);
 
   const [selectedWord, setSelectedWord] = useState(null);
   const [popupData, setPopupData] = useState(null);
   const [popupLocation, setPopupLocation] = useState({ top: 0, left: 0 });
   const dialogRef = useRef(null);
-  const navigate = useNavigate();
 
   const closePopup = () => {
     setSelectedWord(null);
@@ -176,7 +182,6 @@ export function Page() {
     return <main className="page"><p>Loading book content...</p></main>;
   }
 
-  // Safe page text extraction to avoid split on undefined
   const activePageText = pages[currentPage] || pages[0] || "";
 
   return (
@@ -220,7 +225,7 @@ export function Page() {
             open
             id="popup"
           >
-              <h3 id="word">{selectedWord}</h3>
+              <h3 id="word">{selectedWord} ({selectedBook.lang.toUpperCase()})</h3>
               <p id="definition">{popupData.definition}</p>
               <button id="close-popup" className="btn btn-light" onClick={closePopup}>
                 Close
