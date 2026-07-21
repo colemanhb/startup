@@ -88,6 +88,26 @@ apiRouter.post('/progress', async (req, res) => {
   res.send({ msg: 'Progress saved', progress: bookProgress });
 });
 
+let userSettings = {
+  theme: 'light',
+  fontSize: 1.0,
+};
+
+apiRouter.post('/settings', async (req, res) => {
+  const { theme, fontSize } = req.body;
+  if (theme) {
+    userSettings.theme = theme;
+  }
+  if (fontSize) {
+    userSettings.fontSize = fontSize;
+  }
+  res.send({ msg: 'Settings saved', settings: userSettings });
+});
+
+apiRouter.get('/settings', async (req, res) => {
+  res.send(userSettings);
+});
+
 apiRouter.get('/progress/:bookId', async (req, res) => {
   const stringId = String(req.params.bookId);
   const progress = (stringId in bookProgress) ? bookProgress[stringId] : 0;

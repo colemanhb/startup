@@ -12,8 +12,7 @@ import { Booklist } from './booklist/booklist';
 import { AuthState } from './login/authState';
 
 function App() {
-  const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
-  const currentAuthState = username ? AuthState.Authenticated : AuthState.Unauthenticated;
+  const [username, setUsername] = useState('');
   const [authState, setAuthState] = React.useState(currentAuthState);
   
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
@@ -24,21 +23,43 @@ function App() {
   const settingsPanelRef = React.useRef(null);
   const settingsButtonRef = React.useRef(null);
 
-  const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light');
-  const [fontSize, setFontSize] = useState(parseFloat(localStorage.getItem('fontSize')) || 1.0);
+  const [theme, setTheme] = useState('light');
+  const [fontSize, setFontSize] = useState(1.0);
+
+  const settingsLoaded = useRef(false);
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--font-scale', fontSize);
-    localStorage.setItem('fontSize', fontSize);
-  }, [fontSize]);
+    async function loadSettings() {
+        try {
+            const response = await fetch('/api/settings');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.theme) setTheme(data.theme);
+                if (data.fontSize) setFontSize(Number(data.fontSize));
+            }
+        }catch (error) {
+            console.error('Error loading settings:', error);
+        } finally {
+            setTimeout(() => {
+                settingsLoaded.current = true;
+            }, 100);
+        }
+    }
+    loadSettings();
+  }, []);
 
   const increaseFont = () => setFontSize(prevSize => Math.min(prevSize + 0.1, 2.0));
   const decreaseFont = () => setFontSize(prevSize => Math.max(prevSize - 0.1, 1.0));
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-bs-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    if (!settingsLoaded.current) return;
+    fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ theme, fontSize })
+    }).catch(error => console.error('Error saving settings:', error))
+    
+  }, [theme, fontSize]);
 
   useEffect(() => {
     function handleClickOutside(event) {
