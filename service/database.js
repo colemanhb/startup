@@ -4,8 +4,12 @@ const config = require('./dbConfig.json');
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 const db = client.db('simon');
+
 const userCollection = db.collection('user');
 const scoreCollection = db.collection('score');
+const wordCollection = db.collection('word');
+const progressCollection = db.collection('progress');
+const settingCollection = db.collection('setting');
 
 // This will asynchronously test the connection and exit the process if it fails
 (async function testConnection() {
@@ -18,8 +22,8 @@ const scoreCollection = db.collection('score');
   }
 })();
 
-function getUser(email) {
-  return userCollection.findOne({ email: email });
+function getUser(username) {
+  return userCollection.findOne({ username: username });
 }
 
 function getUserByToken(token) {
@@ -31,11 +35,11 @@ async function addUser(user) {
 }
 
 async function updateUser(user) {
-  await userCollection.updateOne({ email: user.email }, { $set: user });
+  await userCollection.updateOne({ username: user.username }, { $set: user });
 }
 
 async function updateUserRemoveAuth(user) {
-  await userCollection.updateOne({ email: user.email }, { $unset: { token: 1 } });
+  await userCollection.updateOne({ username: user.username }, { $unset: { token: 1 } });
 }
 
 async function saveWord(username, word, definition) {
