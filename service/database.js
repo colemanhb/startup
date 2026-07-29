@@ -112,4 +112,10 @@ module.exports = {
   saveWord,
   getUserWords,
   getAllWordsExcept,
+  saveBookProgress,
+  getBookProgress,
+  saveLastBook,
+  getLastBook,
+  saveSettings,
+  getSettings
 };
