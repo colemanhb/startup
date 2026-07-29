@@ -62,7 +62,7 @@ export function Page() {
   const initialLoadDone = useRef(false);
 
   const [selectedBook, setSelectedBook] = useState(location.state?.book || null);
-  const [loadingBook, setLoadingBook] = useState(false);
+  const [loadingBook, setLoadingBook] = useState(!location.state?.book);
 
   useEffect(() => {
     if (location.state?.book) {
@@ -112,7 +112,7 @@ export function Page() {
 
       try {
         const [text, progressRes] = await Promise.all([
-          getText(selectedBook?.id),
+          getText(selectedBook.id),
           fetch(`/api/progress/${selectedBook.id}`)
             .then(res => res.ok ? res.json() : { progress: 0 })
             .catch(() => ({ progress: 0 })),
@@ -122,7 +122,6 @@ export function Page() {
             body: JSON.stringify({ bookId: selectedBook.id })
           }).catch(error => console.error('Failed to save last book:', error))
         ]);
-
 
         if (isMounted) {
           const savedPage = Number(progressRes.progress) || 0;
@@ -151,7 +150,7 @@ export function Page() {
   }, [rawBookText]);
 
   useEffect(() => {
-    if (loading || !initialLoadDone.current) return;
+    if (loading || !initialLoadDone.current || !selectedBook?.id) return;
 
     fetch('/api/progress', {
       method: 'POST',
@@ -199,7 +198,8 @@ export function Page() {
     setPopupData(data);
 
     try {
-      const response = await fetch(`https://freedictionaryapi.com/api/v1/entries/${selectedBook.lang}/${cleanWord}`);
+      const lang = selectedBook?.lang || 'es';
+      const response = await fetch(`https://freedictionaryapi.com/api/v1/entries/${lang}/${cleanWord}`);
       if (response.ok) {
         const resultData = await response.json();
         const firstEntry = resultData.entries?.[0];
@@ -228,7 +228,7 @@ export function Page() {
     }
   };
 
-  if (loading) {
+  if (loadingBook || loading || !selectedBook) {
     return <main className="page"><p>Loading book content...</p></main>;
   }
 
@@ -237,8 +237,8 @@ export function Page() {
   return (
     <main className="page">
       <div className="title-author">
-        <h4>{selectedBook.title}</h4>
-        <h4>{selectedBook.author}</h4>
+        <h4>{selectedBook?.title}</h4>
+        <h4>{selectedBook?.author}</h4>
       </div>
       <p>
         {activePageText.split(/\s+/).map((word, index) => (
@@ -275,7 +275,7 @@ export function Page() {
           open
           id="popup"
         >
-          <h3 id="word">{selectedWord} ({selectedBook.lang.toUpperCase()})</h3>
+          <h3 id="word">{selectedWord} ({selectedBook?.lang?.toUpperCase()})</h3>
           <p id="definition">{popupData.definition}</p>
           <button id="close-popup" className="btn btn-light" onClick={closePopup}>
             Close
