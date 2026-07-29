@@ -1,6 +1,7 @@
 import './page.css';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { getBookById } from '../data/books';
 
 const DEFAULT_BOOK = { 
   id: 2000, 
@@ -54,15 +55,55 @@ export function Page() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const selectedBook = location.state?.book || DEFAULT_BOOK;
-
   const [rawBookText, setRawBookText] = useState('');
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
   const initialLoadDone = useRef(false);
 
+  const [selectedBook, setSelectedBook] = useState(location.state?.book || null);
+  const [loadingBook, setLoadingBook] = useState(false);
+
   useEffect(() => {
+    if (location.state?.book) {
+      return;
+    }
+
+    let isMounted = true;
+
+    async function fetchLastBook() {
+      try {
+        const res = await fetch('/api/lastBook');
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data.lastBookId) {
+            const lastBook = getBookById(data.lastBookId);
+            if (lastBook) {
+              setSelectedBook(lastBook);
+              return;
+            } 
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching last book:', error);
+      }
+
+      if (isMounted) {
+        setSelectedBook(DEFAULT_BOOK);
+      }
+    }
+
+    fetchLastBook().finally(() => {
+      if (isMounted) {
+        setLoadingBook(false);
+      }
+    });
+    
+    return () => { isMounted = false; };
+  }, [location.state?.book]);
+
+  useEffect(() => {
+    if (!selectedBook?.id) return;
     let isMounted = true;
     initialLoadDone.current = false;
 
@@ -71,11 +112,17 @@ export function Page() {
 
       try {
         const [text, progressRes] = await Promise.all([
-          getText(selectedBook.id),
+          getText(selectedBook?.id),
           fetch(`/api/progress/${selectedBook.id}`)
             .then(res => res.ok ? res.json() : { progress: 0 })
-            .catch(() => ({ progress: 0 }))
+            .catch(() => ({ progress: 0 })),
+          fetch(`/api/lastBook`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookId: selectedBook.id })
+          }).catch(error => console.error('Failed to save last book:', error))
         ]);
+
 
         if (isMounted) {
           const savedPage = Number(progressRes.progress) || 0;
@@ -96,7 +143,7 @@ export function Page() {
     loadBookData();
 
     return () => { isMounted = false; };
-  }, [selectedBook.id]);
+  }, [selectedBook?.id]);
 
   const pages = useMemo(() => {
     if (!rawBookText) return ["No content available."];
@@ -112,7 +159,7 @@ export function Page() {
       body: JSON.stringify({ bookId: selectedBook.id, page: currentPage })
     }).catch(error => console.error('Error saving progress:', error));
 
-  }, [currentPage, loading, selectedBook.id]);
+  }, [currentPage, loading, selectedBook?.id]);
 
   const [selectedWord, setSelectedWord] = useState(null);
   const [popupData, setPopupData] = useState(null);

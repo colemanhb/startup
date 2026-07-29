@@ -122,7 +122,7 @@ apiRouter.get('/lastBook', async (req, res) => {
   const username = (await findUser('token', req.cookies[authCookieName]))?.username;
   const lastBookId = lastBook[username] || null;
   const lastBookProgress = (lastBookId && bookProgress[username] && bookProgress[username][String(lastBookId)]) || 0;
-  res.send({ lastBookId, lastBookProgress });
+  res.send({ lastBookId });
 });
 
 let userSettings = {
