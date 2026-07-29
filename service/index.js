@@ -95,12 +95,34 @@ apiRouter.get('/words', verifyAuth, async (req, res) => {
 let bookProgress = {};
 apiRouter.post('/progress', async (req, res) => {
   const { bookId, page } = req.body;
+  const username = (await findUser('token', req.cookies[authCookieName]))?.username;
   if (!bookId || page === undefined) {
     return res.status(400).send({ msg: 'Missing bookId or page' });
   }
   const stringId = String(bookId);
-  bookProgress[stringId] = page;
+  if (!bookProgress[username]) {
+    bookProgress[username] = {};
+  }
+  bookProgress[username][stringId] = page;
   res.send({ msg: 'Progress saved', progress: bookProgress });
+});
+
+let lastBook = {};
+apiRouter.post('/lastBook', async (req, res) => {
+  const { bookId } = req.body;
+  const username = (await findUser('token', req.cookies[authCookieName]))?.username;
+  if (!bookId) {
+    return res.status(400).send({ msg: 'Missing bookId' });
+  }
+  lastBook[username] = bookId;
+  res.send({ msg: 'Last book saved', lastBook });
+});
+
+apiRouter.get('/lastBook', async (req, res) => {
+  const username = (await findUser('token', req.cookies[authCookieName]))?.username;
+  const lastBookId = lastBook[username] || null;
+  const lastBookProgress = (lastBookId && bookProgress[username] && bookProgress[username][String(lastBookId)]) || 0;
+  res.send({ lastBookId, lastBookProgress });
 });
 
 let userSettings = {
@@ -125,7 +147,8 @@ apiRouter.get('/settings', async (req, res) => {
 
 apiRouter.get('/progress/:bookId', async (req, res) => {
   const stringId = String(req.params.bookId);
-  const progress = (stringId in bookProgress) ? bookProgress[stringId] : 0;
+  const username = (await findUser('token', req.cookies[authCookieName]))?.username;
+  const progress = (stringId in bookProgress[username]) ? bookProgress[username][stringId] : 0;
   res.send({ progress });
 });
 

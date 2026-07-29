@@ -17,6 +17,8 @@
     "vite": "^8.1.4"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1093.0",
+    "@aws-sdk/credential-providers": "^3.1093.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "react": "^19.2.7",
