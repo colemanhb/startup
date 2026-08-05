@@ -2,6 +2,7 @@ import './page.css';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getBookById } from '../data/books';
+import { WordEvent, WordNotifierInstance } from '../wordNotifier';
 
 const DEFAULT_BOOK = { 
   id: 2000, 
@@ -36,6 +37,30 @@ export async function getText(bookID) {
   } catch (error) {
     console.error('Error fetching book text:', error);
     return "";
+  }
+}
+
+async function handleSaveWord() {
+  try {
+    const response = await fetch('/api/word', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
+    });
+
+    if (response.ok) {
+      // 📡 Broadcast event over WebSockets to other connected users
+      WordNotifierInstance.broadcastEvent(
+        username || 'A reader', 
+        WordEvent.WordSaved, 
+        { word: selectedWord, definition: popupData.definition }
+      );
+      closePopup();
+    } else if (response.status === 401) {
+      navigate('/');
+    }
+  } catch (error) {
+    console.error('Error saving word:', error);
   }
 }
 

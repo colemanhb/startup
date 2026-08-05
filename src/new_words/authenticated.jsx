@@ -1,5 +1,6 @@
 import './new_words.css';
 import React, { useEffect, useState } from 'react';
+import { WordEvent, WordNotifierInstance } from '../wordNotifier';
 
 export function Authenticated() {
   const [userWords, setUserWords] = useState({});
@@ -7,6 +8,7 @@ export function Authenticated() {
   const [loading, setLoading] = useState(true);
   const [wordSet, setWordSet] = useState('myWords');
 
+  // Fetch user and friends' words on component mount
   useEffect(() => {
     fetch('/api/words')
       .then((response) => response.json())
@@ -16,6 +18,24 @@ export function Authenticated() {
       })
       .catch((err) => console.error('Error fetching words:', err))
       .finally(() => setLoading(false));
+  }, []);
+
+    // Handle real-time updates for friends' words
+  useEffect(() => {
+    function handleWordEvent(event) {
+      if (event.type === WordEvent.WordSaved) {
+        setFriendsWords((prevWords) => [
+          { username: event.from, word: event.value.word, definition: event.value.definition },
+          ...prevWords,
+        ]);
+      }
+    }
+
+    WordNotifierInstance.addHandler(handleWordEvent);
+
+    return () => {
+      WordNotifierInstance.removeHandler(handleWordEvent);
+    };
   }, []);
 
   if (loading) {
