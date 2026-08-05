@@ -163,40 +163,75 @@ export function Page({ username }) {
 
   const [selectedWord, setSelectedWord] = useState(null);
   const [popupData, setPopupData] = useState(null);
-  const dialogRef = useRef(null);
+  const [popupStyle, setPopupStyle] = useState({ display: 'none' });
+  const popupRef = useRef(null);
 
   const closePopup = () => {
     setSelectedWord(null);
     setPopupData(null);
+    setPopupStyle({ display: 'none' });
   };
 
-async function handleSaveWord() {
-  try {
-    const response = await fetch('/api/word', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
-    });
+  async function handleSaveWord() {
+    try {
+      const response = await fetch('/api/word', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
+      if (response.ok) {
+        const data = await response.json();
 
-      WordNotifierInstance.broadcastEvent(
-        data.username, 
-        WordEvent.WordSaved, 
-        { word: selectedWord, definition: popupData.definition }
-      );
-      closePopup();
-    } else if (response.status === 401) {
-      navigate('/');
+        WordNotifierInstance.broadcastEvent(
+          data.username, 
+          WordEvent.WordSaved, 
+          { word: selectedWord, definition: popupData.definition }
+        );
+        closePopup();
+      } else if (response.status === 401) {
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error saving word:', error);
     }
-  } catch (error) {
-    console.error('Error saving word:', error);
   }
-}
 
   const handleWordClick = async (event, rawWord) => {
     const cleanWord = rawWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "").toLowerCase();
+    
+    // Calculate targeted position based on clicked word bounds
+    const rect = event.currentTarget.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+    const viewportWidth = window.innerWidth;
+
+    const popupWidth = Math.min(280, viewportWidth - 32); // Max width constrained for mobile
+    const popupHeight = 180; // Estimated height
+    const margin = 16; // Edge padding gap
+
+    // Center above clicked word
+    let left = rect.left + scrollX + (rect.width / 2) - (popupWidth / 2);
+    let top = rect.top + scrollY - popupHeight - 8;
+
+    // Flip below if clicked word is near top edge of screen
+    if (rect.top - popupHeight - margin < 0) {
+      top = rect.bottom + scrollY + 8;
+    }
+
+    // Clamp horizontally within screen viewport margins
+    const minLeft = scrollX + margin;
+    const maxLeft = scrollX + viewportWidth - popupWidth - margin;
+    left = Math.max(minLeft, Math.min(left, maxLeft));
+
+    setPopupStyle({
+      position: 'absolute',
+      top: `${top}px`,
+      left: `${left}px`,
+      width: `${popupWidth}px`,
+      zIndex: 1050,
+    });
+
     const data = {
       definition: "Definition not found.",
       translatedDefinition: "Definición no encontrada.",
@@ -244,7 +279,7 @@ async function handleSaveWord() {
   const activePageText = pages[currentPage] || pages[0] || "";
 
   return (
-    <main className="page">
+    <main className="page" style={{ position: 'relative' }}>
       <div className="title-author">
         <h4>{selectedBook?.title}</h4>
         <h4>{selectedBook?.author}</h4>
@@ -278,24 +313,33 @@ async function handleSaveWord() {
           <i className="bi bi-chevron-right"></i>
         </button>
       </div>
+
       {selectedWord && popupData && (
-        <dialog 
-          ref={dialogRef}
-          open
+        <div 
+          ref={popupRef}
           id="popup"
+          className="card shadow-lg p-3"
+          style={popupStyle}
         >
-          <h3 id="word">{selectedWord} ({selectedBook?.lang?.toUpperCase()})</h3>
-          <p id="definition">{popupData.definition}</p>
-          <button id="close-popup" className="btn btn-light" onClick={closePopup}>
-            Close
-          </button>
-          <button 
-            id="save-word" 
-            className="btn btn-light"
-            onClick={handleSaveWord}>
-            Save Word
-          </button>
-        </dialog>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <h5 id="word" className="m-0 fw-bold">{selectedWord} ({selectedBook?.lang?.toUpperCase()})</h5>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={closePopup}
+              aria-label="Close"
+            ></button>
+          </div>
+          <p id="definition" className="small text-muted mb-3">{popupData.definition}</p>
+          <div className="d-flex gap-2">
+            <button 
+              id="save-word" 
+              className="btn btn-primary btn-sm w-100"
+              onClick={handleSaveWord}>
+              Save Word
+            </button>
+          </div>
+        </div>
       )}
     </main>
   );

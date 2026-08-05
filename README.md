@@ -147,7 +147,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **Backend listens for WebSocket connection** - I added a websocket function to my index.js file.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [x] **Frontend makes WebSocket connection** - Users send a websocket notification on the page file and receive one in the new words file.
+- [x] **Data sent over WebSocket connection** - Websocket sends notification that a user saved a word.
+- [x] **WebSocket data displayed** - Users can see other user's saved words as they save them.
+- [x] **Application is fully functional** - My foreign language ebook app works and has all functions I specified in the design.
