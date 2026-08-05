@@ -40,30 +40,6 @@ export async function getText(bookID) {
   }
 }
 
-async function handleSaveWord() {
-  try {
-    const response = await fetch('/api/word', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
-    });
-
-    if (response.ok) {
-      // 📡 Broadcast event over WebSockets to other connected users
-      WordNotifierInstance.broadcastEvent(
-        username || 'A reader', 
-        WordEvent.WordSaved, 
-        { word: selectedWord, definition: popupData.definition }
-      );
-      closePopup();
-    } else if (response.status === 401) {
-      navigate('/');
-    }
-  } catch (error) {
-    console.error('Error saving word:', error);
-  }
-}
-
 export function paginateText(text, wordsPerPage = 700) {
   if (!text) return ["No content available."];
 
@@ -76,7 +52,7 @@ export function paginateText(text, wordsPerPage = 700) {
   return pages;
 }
 
-export function Page() {
+export function Page({ username }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -201,7 +177,14 @@ export function Page() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
       });
+
       if (response.ok) {
+        // Broadcast signal via WebSockets to alert other connected clients
+        WordNotifierInstance.broadcastEvent(
+          username || 'A reader', 
+          WordEvent.WordSaved, 
+          { word: selectedWord, definition: popupData.definition }
+        );
         closePopup();
       } else if (response.status === 401) {
         navigate('/');

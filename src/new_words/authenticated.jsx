@@ -1,5 +1,5 @@
 import './new_words.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { WordEvent, WordNotifierInstance } from '../wordNotifier';
 
 export function Authenticated() {
@@ -8,7 +8,7 @@ export function Authenticated() {
   const [loading, setLoading] = useState(true);
   const [wordSet, setWordSet] = useState('myWords');
 
-  // Fetch user and friends' words on component mount
+  // Fetch user and friends' words on mount
   useEffect(() => {
     fetch('/api/words')
       .then((response) => response.json())
@@ -20,14 +20,26 @@ export function Authenticated() {
       .finally(() => setLoading(false));
   }, []);
 
-    // Handle real-time updates for friends' words
+  // Handle real-time updates for friends' words
   useEffect(() => {
     function handleWordEvent(event) {
       if (event.type === WordEvent.WordSaved) {
-        setFriendsWords((prevWords) => [
-          { username: event.from, word: event.value.word, definition: event.value.definition },
-          ...prevWords,
-        ]);
+        const { word, definition } = event.value || {};
+        const author = event.from || 'Anonymous';
+
+        if (!word) return;
+
+        // Update state while matching the nested object structure: { username: { word: definition } }
+        setFriendsWords((prevWords) => {
+          const userDict = prevWords[author] || {};
+          return {
+            ...prevWords,
+            [author]: {
+              ...userDict,
+              [word]: definition,
+            },
+          };
+        });
       }
     }
 
@@ -38,6 +50,7 @@ export function Authenticated() {
     };
   }, []);
 
+  // ALL HOOKS ARE ABOVE THIS LINE — Conditional render comes AFTER hooks
   if (loading) {
     return (
       <main className="new-words">
@@ -59,7 +72,7 @@ export function Authenticated() {
                   <span className="badge bg-secondary">{username}</span>
                 </td>
                 <td><strong>{word}</strong></td>
-                <td>{typeof def === 'string' ? def : def.definition}</td>
+                <td>{typeof def === 'string' ? def : def?.definition}</td>
               </tr>
             );
           });
@@ -94,7 +107,7 @@ export function Authenticated() {
     return myEntries.map(([word, def]) => (
       <tr key={word}>
         <td><strong>{word}</strong></td>
-        <td>{typeof def === 'string' ? def : def.definition}</td>
+        <td>{typeof def === 'string' ? def : def?.definition}</td>
       </tr>
     ));
   };
@@ -121,7 +134,6 @@ export function Authenticated() {
       <table className="table table-bordered">
         <thead>
           <tr>
-            {/* Show User column only when viewing Global Words */}
             {wordSet === 'friendsWords' && <th>User</th>}
             <th>Word</th>
             <th>Definition</th>

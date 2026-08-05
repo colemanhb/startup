@@ -5,7 +5,11 @@ class WordNotifier {
   constructor() {
     let port = window.location.port;
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    this.socket = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
+    this.socket = new WebSocket(`${protocol}://${window.location.host}`);
+
+    this.socket.onopen = () => {
+      console.log('WebSocket connected');
+    };
 
     this.socket.onmessage = async (event) => {
       try {
