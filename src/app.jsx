@@ -28,6 +28,25 @@ function App() {
 
   const settingsLoaded = useRef(false);
 
+    useEffect(() => {
+      async function checkAuth() {
+        try {
+          const response = await fetch('/api/user/me');
+          if (response.ok) {
+            const data = await response.json();
+            setUsername(data.username);
+            setAuthState(AuthState.Authenticated);
+          } else {
+            setAuthState(AuthState.Unauthenticated);
+          }
+        } catch (err) {
+          console.error('Error verifying auth status:', err);
+          setAuthState(AuthState.Unauthenticated);
+        }
+      }
+      checkAuth();
+    }, []);
+
   useEffect(() => {
     async function loadSettings() {
       try {
@@ -61,11 +80,6 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ theme, fontSize })
     }).catch(error => console.error('Error saving settings:', error));
-  }, [theme, fontSize]);
-
-  useEffect(() => {
-    document.body.className = theme; 
-    document.documentElement.style.setProperty('--app-font-size', `${fontSize}rem`);
   }, [theme, fontSize]);
 
   const increaseFont = () => setFontSize(prev => Number(Math.min(prev + 0.1, 2.0).toFixed(1)));

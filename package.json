@@ -21,10 +21,12 @@
     "@aws-sdk/credential-providers": "^3.1093.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+    "express": "^5.2.1",
     "mongodb": "^7.5.0",
     "react": "^19.2.7",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.1"
+    "react-router-dom": "^7.18.1",
+    "ws": "^8.21.2"
   }
 }

@@ -71,6 +71,10 @@ apiRouter.post('/auth/login', async (req, res) => {
   }
 });
 
+apiRouter.get('/user/me', verifyAuth, async (req, res) => {
+  res.send({ username: req.user.username });
+});
+
 apiRouter.delete('/auth/logout', async (req, res) => {
   try {
     const user = await findUser('token', req.cookies[authCookieName]);
