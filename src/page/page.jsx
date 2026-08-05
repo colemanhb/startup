@@ -170,29 +170,30 @@ export function Page({ username }) {
     setPopupData(null);
   };
 
-  async function handleSaveWord() {
-    try {
-      const response = await fetch('/api/word', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
-      });
+async function handleSaveWord() {
+  try {
+    const response = await fetch('/api/word', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ word: selectedWord, definition: popupData.definition }),
+    });
 
-      if (response.ok) {
-        // Broadcast signal via WebSockets to alert other connected clients
-        WordNotifierInstance.broadcastEvent(
-          username || 'A reader', 
-          WordEvent.WordSaved, 
-          { word: selectedWord, definition: popupData.definition }
-        );
-        closePopup();
-      } else if (response.status === 401) {
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Error saving word:', error);
+    if (response.ok) {
+      const data = await response.json();
+
+      WordNotifierInstance.broadcastEvent(
+        data.username, 
+        WordEvent.WordSaved, 
+        { word: selectedWord, definition: popupData.definition }
+      );
+      closePopup();
+    } else if (response.status === 401) {
+      navigate('/');
     }
+  } catch (error) {
+    console.error('Error saving word:', error);
   }
+}
 
   const handleWordClick = async (event, rawWord) => {
     const cleanWord = rawWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "").toLowerCase();

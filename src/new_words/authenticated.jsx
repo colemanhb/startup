@@ -20,26 +20,17 @@ export function Authenticated() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Handle real-time updates for friends' words
+
   useEffect(() => {
     function handleWordEvent(event) {
-      if (event.type === WordEvent.WordSaved) {
-        const { word, definition } = event.value || {};
-        const author = event.from || 'Anonymous';
-
-        if (!word) return;
-
-        // Update state while matching the nested object structure: { username: { word: definition } }
-        setFriendsWords((prevWords) => {
-          const userDict = prevWords[author] || {};
-          return {
-            ...prevWords,
-            [author]: {
-              ...userDict,
-              [word]: definition,
-            },
-          };
-        });
+      if (event.type === WordEvent.WordSaved || event.type === 'wordSaved') {
+        fetch('/api/words')
+          .then((res) => res.json())
+          .then((data) => {
+            setUserWords(data.myWords || {});
+            setFriendsWords(data.friendsWords || {});
+          })
+          .catch((err) => console.error('Error refreshing words:', err));
       }
     }
 
@@ -50,7 +41,6 @@ export function Authenticated() {
     };
   }, []);
 
-  // ALL HOOKS ARE ABOVE THIS LINE — Conditional render comes AFTER hooks
   if (loading) {
     return (
       <main className="new-words">

@@ -99,7 +99,7 @@ apiRouter.post('/word', verifyAuth, async (req, res) => {
 
     await DB.saveWord(req.user.username, word, definition);
     const myWords = await DB.getUserWords(req.user.username);
-    res.send({ msg: 'Word saved', words: myWords });
+    res.send({ msg: 'Word saved', words: myWords, username: req.user.username });
   } catch (err) {
     console.error('Error saving word:', err);
     res.status(500).send({ msg: 'Error saving word' });
